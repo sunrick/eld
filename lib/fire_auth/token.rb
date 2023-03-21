@@ -16,12 +16,12 @@ module FireAuth
     # sub	Subject	Must be a non-empty string and must be the uid of the user or device.
     # auth_time	Authentication time	Must be in the past. The time when the user authenticated.
     def initialize(
-      firebase_project_ids:,
+      firebase_ids:,
       cache: nil,
       cache_key: 'fire_auth/certificates',
       cache_expires_in: 3600 # 1 hour
     )
-      @firebase_project_ids = Array(firebase_project_id)
+      @firebase_ids = Array(firebase_ids)
 
       if defined?(Rails)
         @cache = Rails::Cache
@@ -80,7 +80,7 @@ module FireAuth
     end
 
     def valid_firebase_id?(payload)
-      @firebase_project_ids.any? do |id|
+      @firebase_ids.any? do |id|
         payload['aud'] == id &&
         payload['iss'] == "#{GOOGLE_ISS}/#{id}"
       end
