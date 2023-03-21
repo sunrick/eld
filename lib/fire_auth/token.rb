@@ -24,7 +24,7 @@ module FireAuth
       @firebase_ids = Array(firebase_ids)
 
       if defined?(Rails)
-        @cache = Rails::Cache
+        @cache = Rails.cache
       else
         @cache = Fire::Cache
       end
