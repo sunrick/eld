@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 require "fire_auth"
+require 'vcr'
+require 'pry'
+require 'timecop'
+
+VCR.configure do |config|
+  config.cassette_library_dir = "spec/vcr_cassettes"
+  config.hook_into :webmock
+end
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

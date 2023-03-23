@@ -1,3 +1,6 @@
+require 'jwt'
+require 'httparty'
+
 module FireAuth
   class Authenticator
     GOOGLE_CERTIFICATES_URL ='https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com'
@@ -16,15 +19,15 @@ module FireAuth
     # sub	Subject	Must be a non-empty string and must be the uid of the user or device.
     # auth_time	Authentication time	Must be in the past. The time when the user authenticated.
 
-    attr_accessor :firebase_ids, :cache, :cache_key, :cache_expires_in
+    attr_accessor :firebase_id, :cache, :cache_key, :cache_expires_in
 
     def initialize(
-      firebase_ids:,
+      firebase_id:,
       cache: nil,
       cache_key: 'fire_auth/certificates',
-      cache_expires_in: 3600 # 1 hour
+      cache_expires_in: 3600 # 1 hour,
     )
-      self.firebase_ids = Array(firebase_ids)
+      self.firebase_id = Array(firebase_id)
 
       if cache
         self.cache = cache
@@ -39,18 +42,16 @@ module FireAuth
     end
 
     def authenticate(token)
-      token = token.to_s
+      return false if token.nil? || token.empty?
 
-      return false if token.empty?
-
-      certificate = find_certificate(token)
+      certificate = certificate(token)
 
       payload = JWT.decode(
         token,
         certificate.public_key,
         true,
         algorithm: 'RS256',
-        verify_iat: true
+        verify_expiration: false # we verify this manually
       ).first
 
       valid_token?(payload) ? payload : false
@@ -58,34 +59,36 @@ module FireAuth
 
     def certificates
       cache.fetch(cache_key, expires_in: cache_expires_in) do
-        http_certificates
+        response = HTTParty.get(GOOGLE_CERTIFICATES_URL)
+        JSON.parse(response.body)
       end
     end
 
-    def http_certificates
-      response = HTTParty.get(GOOGLE_CERTIFICATES_URL)
-      JSON.parse(response.body)
-    end
-
-    def find_certificate(token)
+    def certificate(token)
       kid = JWT.decode(token, nil, false).last['kid']
+
       certificate = certificates[kid]
+
       OpenSSL::X509::Certificate.new(certificate)
     end
 
     def valid_token?(payload)
-      current_time = Time.now.utc.to_i
+      current_time_epoch = Time.now.utc.to_i
+
+      binding.pry
 
       !payload.empty? &&
-      payload['exp'].to_i > current_time &&
-      payload['iat'].to_i < current_time &&
-      payload['auth_time'] < current_time &&
+      payload['exp'].to_i > current_time_epoch &&
+      payload['iat'].to_i < current_time_epoch &&
+      payload['auth_time'] < current_time_epoch &&
       valid_firebase_id?(payload) &&
-      payload['sub'].present?
+      !payload['sub'].nil? &&
+      !payload['sub'].empty? &&
+      payload['sub'] == payload['user_id']
     end
 
     def valid_firebase_id?(payload)
-      firebase_ids.any? do |id|
+      firebase_id.any? do |id|
         payload['aud'] == id &&
         payload['iss'] == "#{GOOGLE_ISS}/#{id}"
       end
