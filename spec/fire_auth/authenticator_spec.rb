@@ -31,7 +31,7 @@ RSpec.describe FireAuth::Authenticator do
       end
     end
 
-    context 'valid token' do
+    context 'token can be decoded' do
       context 'single firebase project' do
         it 'returns decoded token' do
           authenticator = FireAuth.build(firebase_id: firebase_id)
@@ -45,13 +45,47 @@ RSpec.describe FireAuth::Authenticator do
           expect(authenticator.authenticate(token)).to eq(decoded_token)
         end
       end
+
+      context 'bad audience' do
+        it 'returns false' do
+        end
+      end
+
+      context 'auth_time is in future' do
+        it 'returns false' do
+        end
+      end
+
+      context 'nil subject' do
+        it 'returns false' do
+        end
+      end
+
+      context 'empty subject' do
+        it 'returns false' do
+        end
+      end
+
+      context 'subject does not match user_id' do
+        it 'returns false' do
+        end
+      end
+
+      context 'iat' do
+        it 'returns false' do
+        end
+      end
+
+      context 'token (exp) expired' do
+        it 'returns false' do
+        end
+      end
     end
 
-    context 'invalid token' do
+    context 'token cannot be decoded' do
       it 'returns false' do
         authenticator = FireAuth.build(firebase_id: firebase_id)
-        payload = authenticator.authenticate('test')
-        expect(payload).to eq(false)
+        expect(authenticator.authenticate('test')).to eq(false)
       end
     end
 
@@ -61,41 +95,6 @@ RSpec.describe FireAuth::Authenticator do
     end
 
     context 'empty token' do
-      it 'returns false' do
-      end
-    end
-
-    context 'bad audience' do
-      it 'returns false' do
-      end
-    end
-
-    context 'auth_time is in future' do
-      it 'returns false' do
-      end
-    end
-
-    context 'nil subject' do
-      it 'returns false' do
-      end
-    end
-
-    context 'empty subject' do
-      it 'returns false' do
-      end
-    end
-
-    context 'subject does not match user_id' do
-      it 'returns false' do
-      end
-    end
-
-    context 'iat' do
-      it 'returns false' do
-      end
-    end
-
-    context 'token (exp) expired' do
       it 'returns false' do
       end
     end
