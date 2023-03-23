@@ -22,7 +22,7 @@ RSpec.describe FireAuth::Authenticator do
       "firebase"=>{"identities"=>{"email"=>["test@test.com"]}, "sign_in_provider"=>"password"}}
   end
 
-  context '#perform' do
+  context '#authenticate' do
     around do |example|
       VCR.use_cassette("google_certificates") do
         Timecop.freeze(current_time) do
