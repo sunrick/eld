@@ -41,7 +41,7 @@ RSpec.describe FireAuth::Authenticator do
 
       context 'multiple firebase projects' do
         it 'returns decoded token' do
-          authenticator = FireAuth.build(firebase_id: firebase_id)
+          authenticator = FireAuth.build(firebase_id: ['test1', firebase_id])
           expect(authenticator.authenticate(token)).to eq(decoded_token)
         end
       end
@@ -50,7 +50,7 @@ RSpec.describe FireAuth::Authenticator do
     context 'invalid token' do
       it 'returns false' do
         authenticator = FireAuth.build(firebase_id: firebase_id)
-        payload = authenticator.authenticate(token)
+        payload = authenticator.authenticate('test')
         expect(payload).to eq(false)
       end
     end

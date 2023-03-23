@@ -75,8 +75,6 @@ module FireAuth
     def valid_token?(payload)
       current_time_epoch = Time.now.utc.to_i
 
-      binding.pry
-
       !payload.empty? &&
       payload['exp'].to_i > current_time_epoch &&
       payload['iat'].to_i < current_time_epoch &&
