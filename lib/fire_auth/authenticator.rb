@@ -1,5 +1,5 @@
 module FireAuth
-  class Token
+  class Authenticator
     GOOGLE_CERTIFICATES_URL ='https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com'
     GOOGLE_ISS = 'https://securetoken.google.com'
 
@@ -15,25 +15,30 @@ module FireAuth
     # iss	Issuer	Must be "https://securetoken.google.com/<projectId>", where <projectId> is the same project ID used for aud above.
     # sub	Subject	Must be a non-empty string and must be the uid of the user or device.
     # auth_time	Authentication time	Must be in the past. The time when the user authenticated.
+
+    attr_accessor :firebase_ids, :cache, :cache_key, :cache_expires_in
+
     def initialize(
       firebase_ids:,
       cache: nil,
       cache_key: 'fire_auth/certificates',
       cache_expires_in: 3600 # 1 hour
     )
-      @firebase_ids = Array(firebase_ids)
+      self.firebase_ids = Array(firebase_ids)
 
-      if defined?(Rails)
-        @cache = Rails.cache
+      if cache
+        self.cache = cache
+      elsif defined?(Rails)
+        self.cache = Rails.cache
       else
-        @cache = Fire::Cache
+        self.cache = FireAuth::Cache
       end
 
-      @cache_key = cache_key
-      @cache_expires_in = cache_expires_in
+      self.cache_key = cache_key
+      self.cache_expires_in = cache_expires_in
     end
 
-    def verify(token)
+    def authenticate(token)
       token = token.to_s
 
       return false if token.empty?
@@ -52,7 +57,7 @@ module FireAuth
     end
 
     def certificates
-      @cache.fetch(@cache_key, expires_in: @cache_expires_in) do
+      cache.fetch(cache_key, expires_in: cache_expires_in) do
         http_certificates
       end
     end
@@ -80,7 +85,7 @@ module FireAuth
     end
 
     def valid_firebase_id?(payload)
-      @firebase_ids.any? do |id|
+      firebase_ids.any? do |id|
         payload['aud'] == id &&
         payload['iss'] == "#{GOOGLE_ISS}/#{id}"
       end
