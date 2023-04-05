@@ -10,7 +10,7 @@ RSpec.describe FireAuth::Authenticator do
   let(:aud) { firebase_id }
   let(:user_id) { "Z02vuFq6RAU1NqVrWrdLAjyiqJ83" }
   let(:sub) { user_id }
-  let(:current_time) { Time.at(auth_time + 5).utc }
+  let(:current_time) { 1_679_606_440 }
   let(:auth_time) { 1_679_606_435 }
   let(:iat) { 1_679_606_435 }
   let(:exp) { 1_679_610_035 }
@@ -38,7 +38,7 @@ RSpec.describe FireAuth::Authenticator do
   context "#authenticate" do
     around do |example|
       VCR.use_cassette("google_certificates") do
-        Timecop.freeze(current_time) { example.run }
+        Timecop.freeze(Time.at(current_time).utc) { example.run }
       end
     end
 
@@ -67,8 +67,25 @@ RSpec.describe FireAuth::Authenticator do
         end
       end
 
-      context "auth_time is in future" do
+      context "auth_time is current time" do
+        let(:auth_time) { current_time }
+
         it "returns false" do
+          expect(authenticator).to receive(:decode_token).and_return(
+            decoded_token
+          )
+          expect(authenticator.authenticate(token)).to eq(false)
+        end
+      end
+
+      context "auth_time is in future" do
+        let(:auth_time) { current_time + 5 }
+
+        it "returns false" do
+          expect(authenticator).to receive(:decode_token).and_return(
+            decoded_token
+          )
+          expect(authenticator.authenticate(token)).to eq(false)
         end
       end
 
@@ -105,13 +122,58 @@ RSpec.describe FireAuth::Authenticator do
         end
       end
 
-      context "iat" do
+      context "iat is current time" do
+        let(:iat) { current_time }
+
         it "returns false" do
+          expect(authenticator).to receive(:decode_token).and_return(
+            decoded_token
+          )
+          expect(authenticator.authenticate(token)).to eq(false)
         end
       end
 
-      context "token (exp) expired" do
+      context "iat is in the future" do
+        let(:iat) { current_time + 5 }
+
         it "returns false" do
+          expect(authenticator).to receive(:decode_token).and_return(
+            decoded_token
+          )
+          expect(authenticator.authenticate(token)).to eq(false)
+        end
+      end
+
+      context "exp is current time" do
+        let(:exp) { current_time }
+
+        it "returns false" do
+          expect(authenticator).to receive(:decode_token).and_return(
+            decoded_token
+          )
+          expect(authenticator.authenticate(token)).to eq(false)
+        end
+      end
+
+      context "exp is in the past" do
+        let(:exp) { current_time - 5}
+
+        it "returns false" do
+          expect(authenticator).to receive(:decode_token).and_return(
+            decoded_token
+          )
+          expect(authenticator.authenticate(token)).to eq(false)
+        end
+      end
+
+      context "iss does not match" do
+        let(:iss) { "https://securetoken.google.com/bad" }
+
+        it 'returns false' do
+          expect(authenticator).to receive(:decode_token).and_return(
+            decoded_token
+          )
+          expect(authenticator.authenticate(token)).to eq(false)
         end
       end
     end
