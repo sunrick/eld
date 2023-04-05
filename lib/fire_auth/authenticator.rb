@@ -29,7 +29,9 @@ module FireAuth
     def authenticate(token)
       return false if token.nil? || token.empty?
 
-      certificate = FireAuth::Certificate.find(token)
+      kid = JWT.decode(token, nil, false).last["kid"]
+
+      certificate = FireAuth::Certificate.find(kid)
 
       payload = decode_token(token, certificate.public_key)
 
