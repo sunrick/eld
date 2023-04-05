@@ -91,11 +91,15 @@ RSpec.describe FireAuth::Authenticator do
 
     context 'nil token' do
       it 'returns false' do
+        authenticator = FireAuth.build(firebase_id: firebase_id)
+        expect(authenticator.authenticate(nil)).to eq(false)
       end
     end
 
     context 'empty token' do
       it 'returns false' do
+        authenticator = FireAuth.build(firebase_id: firebase_id)
+        expect(authenticator.authenticate('')).to eq(false)
       end
     end
   end

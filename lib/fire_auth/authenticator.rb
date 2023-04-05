@@ -55,6 +55,12 @@ module FireAuth
       ).first
 
       valid_token?(payload) ? payload : false
+    rescue JWT::DecodeError => e
+      handle_error(e)
+    end
+
+    def handle_error(error)
+      false
     end
 
     def certificates
