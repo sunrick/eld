@@ -2,34 +2,25 @@ module FireAuth
   module Cache
     class Memory
       def initialize
-        @data = {}
-        @expires_in = 3600
+        @storage = {}
       end
 
       def fetch
-        current_time = Time.now.utc
+        current_time = Time.now.utc.to_i
 
-        if @data && @data[:value] && @data[:expires_at] > current_time
-          if @data[:expires_in] == @expires_in
-            @data[:value]
-          else
-            set(current_time) { yield }
-          end
+        if @storage[:data] && @storage[:expires_at] > current_time
+          @storage[:data]
         else
-          set(current_time) { yield }
+          set { yield }
         end
       end
 
-      def set(current_time)
-        value = yield
+      def set
+        response = yield
 
-        @data = {
-          value: value,
-          expires_in: @expires_in,
-          expires_at: current_time + @expires_in
-        }
+        @storage = response
 
-        value
+        response[:data]
       end
     end
   end

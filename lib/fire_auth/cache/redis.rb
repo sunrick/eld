@@ -1,4 +1,6 @@
 module FireAuth
-  class Cache::Redis
+  module Cache
+    class Redis
+    end
   end
 end

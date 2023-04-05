@@ -6,7 +6,11 @@ module FireAuth
     def self.all
       FireAuth.cache.fetch do
         response = HTTParty.get(GOOGLE_CERTIFICATES_URL)
-        JSON.parse(response.body)
+
+        {
+          expires_at: Time.parse(response.headers['expires']).utc.to_i,
+          data: JSON.parse(response.body)
+        }
       end
     end
 
