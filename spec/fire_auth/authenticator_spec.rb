@@ -9,6 +9,7 @@ RSpec.describe FireAuth::Authenticator do
   let(:iss) { "https://securetoken.google.com/#{firebase_id}" }
   let(:aud) { firebase_id }
   let(:user_id) { "Z02vuFq6RAU1NqVrWrdLAjyiqJ83" }
+  let(:sub) { user_id }
   let(:current_time) { Time.at(auth_time + 5).utc }
   let(:auth_time) { 1_679_606_435 }
   let(:iat) { 1_679_606_435 }
@@ -20,7 +21,7 @@ RSpec.describe FireAuth::Authenticator do
       "aud" => aud,
       "auth_time" => auth_time,
       "user_id" => user_id,
-      "sub" => user_id,
+      "sub" => sub,
       "iat" => iat,
       "exp" => exp,
       "email" => "test@test.com",
@@ -70,17 +71,29 @@ RSpec.describe FireAuth::Authenticator do
       end
 
       context "nil subject" do
+        let(:sub) { nil }
+
         it "returns false" do
+          expect(authenticator).to receive(:decode_token).and_return(decoded_token)
+          expect(authenticator.authenticate(token)).to eq(false)
         end
       end
 
       context "empty subject" do
+        let(:sub) { '' }
+
         it "returns false" do
+          expect(authenticator).to receive(:decode_token).and_return(decoded_token)
+          expect(authenticator.authenticate(token)).to eq(false)
         end
       end
 
       context "subject does not match user_id" do
+        let(:sub) { 'bad' }
+
         it "returns false" do
+          expect(authenticator).to receive(:decode_token).and_return(decoded_token)
+          expect(authenticator.authenticate(token)).to eq(false)
         end
       end
 
