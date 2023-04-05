@@ -47,18 +47,21 @@ module FireAuth
 
       certificate = certificate(token)
 
-      payload =
-        JWT.decode(
-          token,
-          certificate.public_key,
-          true,
-          algorithm: "RS256",
-          verify_expiration: false # we verify this manually
-        ).first
+      payload = decode_token(token, certificate.public_key)
 
       valid_token?(payload) ? payload : false
     rescue JWT::DecodeError => e
       handle_error(e)
+    end
+
+    def decode_token(token, public_key)
+      JWT.decode(
+        token,
+        public_key,
+        true,
+        algorithm: "RS256",
+        verify_expiration: false # we verify this manually
+      ).first
     end
 
     def handle_error(error)
