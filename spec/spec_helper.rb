@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require "fire_auth"
-require 'vcr'
-require 'pry'
-require 'timecop'
+require "vcr"
+require "pry"
+require "timecop"
 
 VCR.configure do |config|
   config.cassette_library_dir = "spec/vcr_cassettes"

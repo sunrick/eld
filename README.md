@@ -2,12 +2,12 @@
 
 ## TODO
 
-* Renew cache based on time from HTTP response from google
-* Build own redis caching class
-* Finish basic tests
-* Error handling?
-* Refactoring?
-* Additional features?
+- Renew cache based on time from HTTP response from google
+- Build own redis caching class
+- Finish basic tests
+- Error handling?
+- Refactoring?
+- Additional features?
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/fire_auth`. To experiment with that code, run `bin/console` for an interactive prompt.
 
@@ -18,7 +18,7 @@ TODO: Delete this and the text above, and describe your gem
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'fire_auth'
+gem "fire_auth"
 ```
 
 And then execute:

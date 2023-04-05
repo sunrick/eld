@@ -1,10 +1,11 @@
-require 'jwt'
-require 'httparty'
+require "jwt"
+require "httparty"
 
 module FireAuth
   class Authenticator
-    GOOGLE_CERTIFICATES_URL ='https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com'
-    GOOGLE_ISS = 'https://securetoken.google.com'
+    GOOGLE_CERTIFICATES_URL =
+      "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    GOOGLE_ISS = "https://securetoken.google.com"
 
     # See Firebase docs for implemenation details
     # https://firebase.google.com/docs/auth/admin/verify-id-tokens?authuser=0#verify_id_tokens_using_a_third-party_jwt_library
@@ -24,7 +25,7 @@ module FireAuth
     def initialize(
       firebase_id:,
       cache: nil,
-      cache_key: 'fire_auth/certificates',
+      cache_key: "fire_auth/certificates",
       cache_expires_in: 3600 # 1 hour,
     )
       self.firebase_id = Array(firebase_id)
@@ -46,13 +47,14 @@ module FireAuth
 
       certificate = certificate(token)
 
-      payload = JWT.decode(
-        token,
-        certificate.public_key,
-        true,
-        algorithm: 'RS256',
-        verify_expiration: false # we verify this manually
-      ).first
+      payload =
+        JWT.decode(
+          token,
+          certificate.public_key,
+          true,
+          algorithm: "RS256",
+          verify_expiration: false # we verify this manually
+        ).first
 
       valid_token?(payload) ? payload : false
     rescue JWT::DecodeError => e
@@ -71,7 +73,7 @@ module FireAuth
     end
 
     def certificate(token)
-      kid = JWT.decode(token, nil, false).last['kid']
+      kid = JWT.decode(token, nil, false).last["kid"]
 
       certificate = certificates[kid]
 
@@ -81,20 +83,16 @@ module FireAuth
     def valid_token?(payload)
       current_time_epoch = Time.now.utc.to_i
 
-      !payload.empty? &&
-      payload['exp'].to_i > current_time_epoch &&
-      payload['iat'].to_i < current_time_epoch &&
-      payload['auth_time'] < current_time_epoch &&
-      valid_firebase_id?(payload) &&
-      !payload['sub'].nil? &&
-      !payload['sub'].empty? &&
-      payload['sub'] == payload['user_id']
+      !payload.empty? && payload["exp"].to_i > current_time_epoch &&
+        payload["iat"].to_i < current_time_epoch &&
+        payload["auth_time"] < current_time_epoch &&
+        valid_firebase_id?(payload) && !payload["sub"].nil? &&
+        !payload["sub"].empty? && payload["sub"] == payload["user_id"]
     end
 
     def valid_firebase_id?(payload)
       firebase_id.any? do |id|
-        payload['aud'] == id &&
-        payload['iss'] == "#{GOOGLE_ISS}/#{id}"
+        payload["aud"] == id && payload["iss"] == "#{GOOGLE_ISS}/#{id}"
       end
     end
   end
