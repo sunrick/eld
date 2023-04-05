@@ -1,5 +1,5 @@
 RSpec.describe FireAuth::Authenticator do
-  let(:authenticator) { FireAuth.build(firebase_id: firebase_id) }
+  let(:authenticator) { FireAuth::Authenticator.new(firebase_id: firebase_id) }
 
   let(:token) do
     "eyJhbGciOiJSUzI1NiIsImtpZCI6IjFlOTczZWUwZTE2ZjdlZWY0ZjkyMWQ1MGRjNjFkNzBiMmVmZWZjMTkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZmlyZS1hdXRoLTY3ZDVmIiwiYXVkIjoiZmlyZS1hdXRoLTY3ZDVmIiwiYXV0aF90aW1lIjoxNjc5NjA2NDM1LCJ1c2VyX2lkIjoiWjAydnVGcTZSQVUxTnFWcldyZExBanlpcUo4MyIsInN1YiI6IlowMnZ1RnE2UkFVMU5xVnJXcmRMQWp5aXFKODMiLCJpYXQiOjE2Nzk2MDY0MzUsImV4cCI6MTY3OTYxMDAzNSwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInRlc3RAdGVzdC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.jz_KwazKwRp-kva9cwdFTxGZ-BL4OGFsnXEdI1vMKYzf8eh8lIhYOrcXhx7xuc2hrWPkfB4lZ-yBs82IdDCuk5yBqyhzbyWrR9kxxshkZoQGEM-_BgrPuXEk8WfmzhNTRJCmnL0Xq-vyBIAwFqpBrUBMa11QAtzLWhqSXJ9PJlnfT-933mxDxP43WjzyQoZNoVAJYH4WjsLmAfAAzu7_8G3wgXG-Hi6K1DnKBcDW2Y4C80mD7LNdCbxZ3Tnmtq_WvKK50BgSV99Tcbmxbn2oyQtLBQ2STCo3wcSeJBy9Mry1Q32BRPOLVn6wr9vUqxRnKwa1VQI2Rbu2JmJoNsZcLQ"
@@ -51,7 +51,7 @@ RSpec.describe FireAuth::Authenticator do
 
       context "multiple firebase projects" do
         it "returns decoded token" do
-          authenticator = FireAuth.build(firebase_id: ["test1", firebase_id])
+          authenticator = FireAuth::Authenticator.new(firebase_id: ["test1", firebase_id])
           expect(authenticator.authenticate(token)).to eq(decoded_token)
         end
       end

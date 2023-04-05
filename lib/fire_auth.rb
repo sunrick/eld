@@ -9,10 +9,6 @@ module FireAuth
   class Error < StandardError
   end
 
-  def self.build(**options)
-    FireAuth::Authenticator.new(**options)
-  end
-
   def self.cache
     @@cache ||= FireAuth::Cache::Memory.new
   end
