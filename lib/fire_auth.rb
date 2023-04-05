@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "fire_auth/version"
-require_relative "fire_auth/cache"
+require_relative "fire_auth/cache/memory"
 require_relative "fire_auth/certificate"
 require_relative "fire_auth/authenticator"
 
@@ -14,7 +14,7 @@ module FireAuth
   end
 
   def self.cache
-    @@cache ||= FireAuth::Cache.new
+    @@cache ||= FireAuth::Cache::Memory.new
   end
 
   def self.cache=(value)
