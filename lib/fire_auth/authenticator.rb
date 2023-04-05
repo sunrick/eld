@@ -3,8 +3,6 @@ require "httparty"
 
 module FireAuth
   class Authenticator
-    GOOGLE_CERTIFICATES_URL =
-      "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
     GOOGLE_ISS = "https://securetoken.google.com"
 
     # See Firebase docs for implemenation details
@@ -20,32 +18,18 @@ module FireAuth
     # sub	Subject	Must be a non-empty string and must be the uid of the user or device.
     # auth_time	Authentication time	Must be in the past. The time when the user authenticated.
 
-    attr_accessor :firebase_id, :cache, :cache_key, :cache_expires_in
+    attr_accessor :firebase_id
 
     def initialize(
-      firebase_id:,
-      cache: nil,
-      cache_key: "fire_auth/certificates",
-      cache_expires_in: 3600 # 1 hour,
+      firebase_id:
     )
       self.firebase_id = Array(firebase_id)
-
-      if cache
-        self.cache = cache
-      elsif defined?(Rails)
-        self.cache = Rails.cache
-      else
-        self.cache = FireAuth::Cache
-      end
-
-      self.cache_key = cache_key
-      self.cache_expires_in = cache_expires_in
     end
 
     def authenticate(token)
       return false if token.nil? || token.empty?
 
-      certificate = certificate(token)
+      certificate = FireAuth::Certificate.find(token)
 
       payload = decode_token(token, certificate.public_key)
 
@@ -66,21 +50,6 @@ module FireAuth
 
     def handle_error(error)
       false
-    end
-
-    def certificates
-      cache.fetch(cache_key, expires_in: cache_expires_in) do
-        response = HTTParty.get(GOOGLE_CERTIFICATES_URL)
-        JSON.parse(response.body)
-      end
-    end
-
-    def certificate(token)
-      kid = JWT.decode(token, nil, false).last["kid"]
-
-      certificate = certificates[kid]
-
-      OpenSSL::X509::Certificate.new(certificate)
     end
 
     def valid_token?(payload)
