@@ -4,7 +4,7 @@ module FireAuth
     "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
 
     def self.certificates
-      FireAuth.cache.fetch('fire_auth/certificates', expires_in: 3600) do
+      FireAuth.cache.fetch do
         response = HTTParty.get(GOOGLE_CERTIFICATES_URL)
         JSON.parse(response.body)
       end
