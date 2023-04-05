@@ -60,7 +60,9 @@ RSpec.describe FireAuth::Authenticator do
         let(:aud) { "bad" }
 
         it "returns false" do
-          expect(authenticator).to receive(:decode_token).and_return(decoded_token)
+          expect(authenticator).to receive(:decode_token).and_return(
+            decoded_token
+          )
           expect(authenticator.authenticate(token)).to eq(false)
         end
       end
@@ -74,25 +76,31 @@ RSpec.describe FireAuth::Authenticator do
         let(:sub) { nil }
 
         it "returns false" do
-          expect(authenticator).to receive(:decode_token).and_return(decoded_token)
+          expect(authenticator).to receive(:decode_token).and_return(
+            decoded_token
+          )
           expect(authenticator.authenticate(token)).to eq(false)
         end
       end
 
       context "empty subject" do
-        let(:sub) { '' }
+        let(:sub) { "" }
 
         it "returns false" do
-          expect(authenticator).to receive(:decode_token).and_return(decoded_token)
+          expect(authenticator).to receive(:decode_token).and_return(
+            decoded_token
+          )
           expect(authenticator.authenticate(token)).to eq(false)
         end
       end
 
       context "subject does not match user_id" do
-        let(:sub) { 'bad' }
+        let(:sub) { "bad" }
 
         it "returns false" do
-          expect(authenticator).to receive(:decode_token).and_return(decoded_token)
+          expect(authenticator).to receive(:decode_token).and_return(
+            decoded_token
+          )
           expect(authenticator.authenticate(token)).to eq(false)
         end
       end
