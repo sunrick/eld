@@ -14,11 +14,7 @@ module FireAuth
   end
 
   def self.cache
-    @@cache ||= if defined?(Rails)
-      Rails.cache
-    else
-      FireAuth::Cache
-    end
+    @@cache ||= FireAuth::Cache.new
   end
 
   def self.cache=(value)
