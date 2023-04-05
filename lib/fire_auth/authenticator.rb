@@ -84,13 +84,16 @@ module FireAuth
     end
 
     def valid_token?(payload)
-      current_time_epoch = Time.now.utc.to_i
+      current_time = Time.now.utc.to_i
 
-      !payload.empty? && payload["exp"].to_i > current_time_epoch &&
-        payload["iat"].to_i < current_time_epoch &&
-        payload["auth_time"] < current_time_epoch &&
-        valid_firebase_id?(payload) && !payload["sub"].nil? &&
-        !payload["sub"].empty? && payload["sub"] == payload["user_id"]
+      !payload.empty? &&
+        payload["exp"].to_i > current_time &&
+        payload["iat"].to_i < current_time &&
+        payload["auth_time"] < current_time &&
+        !payload["sub"].nil? &&
+        !payload["sub"].empty? &&
+        payload["sub"] == payload["user_id"] &&
+        valid_firebase_id?(payload)
     end
 
     def valid_firebase_id?(payload)

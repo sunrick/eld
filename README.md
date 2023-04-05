@@ -4,8 +4,6 @@
 
 - Renew cache based on time from HTTP response from google
 - Build own redis caching class
-- Finish basic tests
-- Error handling?
 - Refactoring?
 - Additional features?
 
