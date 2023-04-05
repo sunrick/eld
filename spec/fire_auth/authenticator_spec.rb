@@ -156,7 +156,7 @@ RSpec.describe FireAuth::Authenticator do
       end
 
       context "exp is in the past" do
-        let(:exp) { current_time - 5}
+        let(:exp) { current_time - 5 }
 
         it "returns false" do
           expect(authenticator).to receive(:decode_token).and_return(
@@ -169,7 +169,7 @@ RSpec.describe FireAuth::Authenticator do
       context "iss does not match" do
         let(:iss) { "https://securetoken.google.com/bad" }
 
-        it 'returns false' do
+        it "returns false" do
           expect(authenticator).to receive(:decode_token).and_return(
             decoded_token
           )
