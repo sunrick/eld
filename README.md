@@ -22,6 +22,32 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
+```
+FireAuth.configure do |c|
+  c.firebase_id = 'YOUR_FIREBASE_PROJECT_ID'
+end
+
+
+payload = FireAuth.authenticate('FIREBASE_ACCESS_TOKEN')
+# => {
+      "iss" => "https://securetoken.google.com/fire-auth-67d5f",
+      "aud" => "fire-auth-67d5f",
+      "auth_time" => 1679606435,
+      "user_id" => "Z02vuFq6RAU1NqVrWrdLAjyiqJ83",
+      "sub" => "Z02vuFq6RAU1NqVrWrdLAjyiqJ83",
+      "iat" => 1679606435,
+        "exp" => 1679610035,
+        "email" => "test@test.com",
+        "email_verified" => false,
+        "firebase" => {
+            "identities" => {
+            "email" => ["test@test.com"]
+            },
+            "sign_in_provider"=>"password"
+        }
+     }
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
