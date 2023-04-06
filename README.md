@@ -22,7 +22,7 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
-```
+```rb
 FireAuth.configure do |c|
   c.firebase_id = 'YOUR_FIREBASE_PROJECT_ID'
 end
