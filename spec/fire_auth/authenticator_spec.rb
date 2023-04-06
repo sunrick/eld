@@ -51,7 +51,15 @@ RSpec.describe FireAuth::Authenticator do
             expect(authenticator.authenticate(token)).to eq(decoded_token)
           end
 
-          xit 'works when certficiate is cached' do
+          it 'works when certficiate is cached' do
+            expect(HTTParty).to receive(
+              :get
+            ).with(
+              "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+            ).once.and_call_original
+
+            expect(authenticator.authenticate(token)).to eq(decoded_token)
+            expect(authenticator.authenticate(token)).to eq(decoded_token)
           end
         end
 
@@ -60,7 +68,15 @@ RSpec.describe FireAuth::Authenticator do
             expect(authenticator.authenticate(token)).to eq(decoded_token)
           end
 
-          xit 'works when certficiate is cached' do
+          it 'works when certificates are cached' do
+            expect(HTTParty).to receive(
+              :get
+            ).with(
+              "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+            ).once.and_call_original
+
+            expect(authenticator.authenticate(token)).to eq(decoded_token)
+            expect(authenticator.authenticate(token)).to eq(decoded_token)
           end
         end
       end
