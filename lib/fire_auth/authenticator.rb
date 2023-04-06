@@ -18,9 +18,7 @@ module FireAuth
     # sub	Subject	Must be a non-empty string and must be the uid of the user or device.
     # auth_time	Authentication time	Must be in the past. The time when the user authenticated.
 
-    def initialize(
-      firebase_id:
-    )
+    def initialize(firebase_id:)
       @firebase_id = Array(firebase_id)
     end
 
@@ -48,10 +46,6 @@ module FireAuth
       ).first
     end
 
-    def handle_error(error)
-      false
-    end
-
     def valid_token?(payload)
       current_time = Time.now.utc.to_i
 
@@ -69,6 +63,10 @@ module FireAuth
       @firebase_id.any? do |id|
         payload["aud"] == id && payload["iss"] == "#{GOOGLE_ISS}/#{id}"
       end
+    end
+
+    def handle_error(error)
+      false
     end
   end
 end
