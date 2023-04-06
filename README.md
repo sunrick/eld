@@ -29,23 +29,25 @@ end
 
 
 payload = FireAuth.authenticate('FIREBASE_ACCESS_TOKEN')
-# => {
-      "iss" => "https://securetoken.google.com/fire-auth-67d5f",
-      "aud" => "fire-auth-67d5f",
-      "auth_time" => 1679606435,
-      "user_id" => "Z02vuFq6RAU1NqVrWrdLAjyiqJ83",
-      "sub" => "Z02vuFq6RAU1NqVrWrdLAjyiqJ83",
-      "iat" => 1679606435,
-        "exp" => 1679610035,
-        "email" => "test@test.com",
-        "email_verified" => false,
-        "firebase" => {
-            "identities" => {
-            "email" => ["test@test.com"]
-            },
-            "sign_in_provider"=>"password"
-        }
-     }
+
+# =>
+{
+  "iss" => "https://securetoken.google.com/fire-auth-67d5f",
+  "aud" => "fire-auth-67d5f",
+  "auth_time" => 1679606435,
+  "user_id" => "Z02vuFq6RAU1NqVrWrdLAjyiqJ83",
+  "sub" => "Z02vuFq6RAU1NqVrWrdLAjyiqJ83",
+  "iat" => 1679606435,
+  "exp" => 1679610035,
+  "email" => "test@test.com",
+  "email_verified" => false,
+  "firebase" => {
+    "identities" => {
+      "email" => ["test@test.com"]
+    },
+    "sign_in_provider"=>"password"
+  }
+}
 ```
 
 ## Development
