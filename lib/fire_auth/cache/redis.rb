@@ -6,7 +6,7 @@ module FireAuth
         cache_key: 'fire_auth/certificates'
       )
         @client = client
-        @cache_key = key
+        @cache_key = cache_key
       end
 
       def fetch
@@ -27,10 +27,16 @@ module FireAuth
         @client.setex(
           @cache_key,
           response[:expires_at],
-          response[:data]
+          response[:data].to_json
         )
 
         response[:data]
+      end
+
+      def clear
+        @client.del(@cache_key)
+
+        nil
       end
     end
   end

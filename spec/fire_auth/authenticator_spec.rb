@@ -1,3 +1,5 @@
+require 'redis'
+
 RSpec.describe FireAuth::Authenticator do
   let(:authenticator) { FireAuth::Authenticator.new(firebase_id: firebase_id) }
 
@@ -44,15 +46,48 @@ RSpec.describe FireAuth::Authenticator do
 
     context "token can be decoded" do
       context "single firebase project" do
-        it "returns decoded token" do
-          expect(authenticator.authenticate(token)).to eq(decoded_token)
+        context 'memory cache' do
+          it "returns decoded token" do
+            expect(authenticator.authenticate(token)).to eq(decoded_token)
+          end
+
+          xit 'works when certficiate is cached' do
+          end
+        end
+
+        context 'redis cache', cache: :redis do
+          it "returns decoded token" do
+            expect(authenticator.authenticate(token)).to eq(decoded_token)
+          end
+
+          xit 'works when certficiate is cached' do
+          end
         end
       end
 
       context "multiple firebase projects" do
-        it "returns decoded token" do
-          authenticator = FireAuth::Authenticator.new(firebase_id: ["test1", firebase_id])
-          expect(authenticator.authenticate(token)).to eq(decoded_token)
+        let(:authenticator) { FireAuth::Authenticator.new(firebase_id: ["test1", firebase_id]) }
+
+        context 'memory cache' do
+          it "returns decoded token" do
+            expect(authenticator.authenticate(token)).to eq(decoded_token)
+          end
+        end
+
+        context 'redis cache', cache: :redis do
+          around(:each) do |example|
+            FireAuth.cache = FireAuth::Cache::Redis.new(
+              client: Redis.new
+            )
+
+            example.run
+
+            FireAuth.cache = FireAuth::Cache::Memory.new
+          end
+
+          it "returns decoded token" do
+            expect(authenticator.authenticate(token)).to eq(decoded_token)
+          end
         end
       end
 

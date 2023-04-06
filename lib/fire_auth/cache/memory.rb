@@ -22,6 +22,12 @@ module FireAuth
 
         response[:data]
       end
+
+      def clear
+        @storage = {}
+
+        nil
+      end
     end
   end
 end
