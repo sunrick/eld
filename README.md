@@ -1,6 +1,6 @@
 # FireAuth
 
-A Ruby gem that helps you authenticate user with Firebase Authentication.
+A Ruby gem that helps you authenticate users with Firebase Authentication.
 
 ## Installation
 
