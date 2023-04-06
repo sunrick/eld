@@ -3,7 +3,7 @@ module FireAuth
     GOOGLE_CERTIFICATES_URL =
     "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
 
-    def self.certificates
+    def self.all
       FireAuth.cache.fetch do
         response = HTTParty.get(GOOGLE_CERTIFICATES_URL)
 
@@ -15,7 +15,7 @@ module FireAuth
     end
 
     def self.find(kid)
-      certificate = certificates[kid]
+      certificate = all[kid]
 
       OpenSSL::X509::Certificate.new(certificate)
     end
