@@ -9,12 +9,6 @@ module FireAuth
   class Error < StandardError
   end
 
-  # class << self
-
-  #   attr_accessor :firebase_id
-
-  # end
-
   def self.configure
     yield(FireAuth)
   end
