@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 require_relative "fire_auth/version"
+
 require_relative "fire_auth/cache/memory"
+require_relative "fire_auth/cache/redis"
+
 require_relative "fire_auth/certificate"
 require_relative "fire_auth/authenticator"
 
