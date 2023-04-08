@@ -49,3 +49,6 @@ RSpec/ExampleLength:
 
 RSpec/ContextWording:
   Enabled: false
+
+RSpec/MessageSpies:
+  Enabled: false
