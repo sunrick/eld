@@ -37,3 +37,9 @@ Metrics/AbcSize:
 
 RSpec/MultipleMemoizedHelpers:
   Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Enabled: false
