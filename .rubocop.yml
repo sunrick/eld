@@ -19,7 +19,7 @@ Style/HashSyntax:
   Enabled: false
 
 Layout/LineLength:
-  Max: 120
+  Enabled: false
 
 Layout/MultilineOperationIndentation:
   Enabled: false
