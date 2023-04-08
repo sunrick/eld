@@ -54,11 +54,15 @@ module FireAuth
       !payload.empty? &&
       payload["exp"].to_i > current_time &&
       payload["iat"].to_i < current_time &&
-      payload["auth_time"] < current_time &&
+      payload["auth_time"].to_i < current_time &&
+      valid_sub?(payload) &&
+      valid_firebase_id?(payload)
+    end
+
+    def valid_sub?(payload)
       !payload["sub"].nil? &&
       !payload["sub"].empty? &&
-      payload["sub"] == payload["user_id"] &&
-      valid_firebase_id?(payload)
+      payload["sub"] == payload["user_id"]
     end
 
     def valid_firebase_id?(payload)
