@@ -43,7 +43,7 @@ RSpec.describe FireAuth::Authenticator do
     end
   end
 
-  shared_examples 'caches correctly' do
+  shared_examples "caches correctly" do
     it "returns decoded token" do
       expect(FireAuth.authenticate(token)).to eq(decoded_token)
     end
