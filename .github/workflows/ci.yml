@@ -27,6 +27,9 @@ jobs:
         run: bundle install
       - name: Run tests
         run: bundle exec rspec
+        env:
+          REDIS_HOST: redis
+          REDIS_PORT: 6379
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v3.2.0
         env:
