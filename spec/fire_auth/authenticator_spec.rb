@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "redis"
 
 RSpec.describe FireAuth::Authenticator do
@@ -86,7 +88,7 @@ RSpec.describe FireAuth::Authenticator do
       end
 
       context "multiple firebase projects" do
-        let(:authenticator) { FireAuth::Authenticator.new(firebase_id: ["test1", firebase_id]) }
+        let(:authenticator) { described_class.new(firebase_id: ["test1", firebase_id]) }
 
         context "memory cache" do
           it "returns decoded token" do
