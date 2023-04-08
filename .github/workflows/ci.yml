@@ -36,4 +36,4 @@ jobs:
       - name: Publish code coverage
         run: |
           export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
-          ./cc-test-reporter after-build -r "68eda66796a5e172e5dd6450b753a0f943c65ee1a4e5c8678a37a527bf8e5131"
+          ./cc-test-reporter after-build -r 68eda66796a5e172e5dd6450b753a0f943c65ee1a4e5c8678a37a527bf8e5131
