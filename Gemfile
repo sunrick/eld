@@ -14,6 +14,4 @@ gem "pry"
 gem "timecop", "~> 0.9"
 gem "redis"
 gem 'simplecov', require: false, group: :test
-  require "simplecov_json_formatter"
 
-  SimpleCov.formatter = SimpleCov::Formatter::JSONFormatter
