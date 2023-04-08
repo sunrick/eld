@@ -13,3 +13,4 @@ gem "webmock", "~> 3.18"
 gem "pry"
 gem "timecop", "~> 0.9"
 gem "redis"
+gem 'simplecov', require: false, group: :test

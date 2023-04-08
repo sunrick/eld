@@ -16,6 +16,7 @@ GEM
     crack (0.4.5)
       rexml
     diff-lcs (1.5.0)
+    docile (1.4.0)
     hashdiff (1.0.1)
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
@@ -66,6 +67,12 @@ GEM
     rubocop-ast (1.27.0)
       parser (>= 3.2.1.0)
     ruby-progressbar (1.13.0)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.12.3)
+    simplecov_json_formatter (0.1.4)
     timecop (0.9.6)
     unicode-display_width (2.4.2)
     vcr (6.1.0)
@@ -84,6 +91,7 @@ DEPENDENCIES
   redis
   rspec (~> 3.0)
   rubocop (~> 1.21)
+  simplecov
   timecop (~> 0.9)
   vcr (~> 6.1)
   webmock (~> 3.18)
