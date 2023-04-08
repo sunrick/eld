@@ -2,6 +2,7 @@
 
 A Ruby gem that helps you authenticate users with Firebase Authentication.
 
+![Build](https://github.com/sunrick/fire_auth/workflows/CI/badge.svg)
 <a href="https://codeclimate.com/github/sunrick/fire_auth/maintainability"><img src="https://api.codeclimate.com/v1/badges/5e8eadb4762ad371641c/maintainability" /></a>
 <a href="https://codeclimate.com/github/sunrick/fire_auth/test_coverage"><img src="https://api.codeclimate.com/v1/badges/5e8eadb4762ad371641c/test_coverage" /></a>
 
