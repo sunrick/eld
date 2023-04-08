@@ -6,7 +6,9 @@
 <a href="https://codeclimate.com/github/sunrick/fire_auth/test_coverage"><img src="https://api.codeclimate.com/v1/badges/5e8eadb4762ad371641c/test_coverage" /></a>
 [![Known Vulnerabilities](https://snyk.io/test/github/sunrick/fire_auth/badge.svg)](https://snyk.io/test/github/{username}/{repo})
 
-A Ruby gem that helps you authenticate users with Firebase Authentication.
+Firebase Authentication for Ruby applications.
+
+For more information checkout the [Firebase docs](https://firebase.google.com/docs/auth).
 
 ## Installation
 

@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Rickard Sundén"]
   spec.email = ["rickardsunden@gmail.com"]
 
-  spec.summary = "Verify Firebase tokens with Ruby"
+  spec.summary = "Firebase Authentication for Ruby applications."
   spec.homepage = "https://github.com/sunrick/fire_auth"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.6.0"
@@ -32,10 +32,6 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  # Uncomment to register a new dependency of your gem
   spec.add_dependency "jwt", "~> 2.7"
   spec.add_dependency "httparty", "~> 0.21"
-
-  # For more information and examples about making a new gem, check out our
-  # guide at: https://bundler.io/guides/creating_gem.html
 end
