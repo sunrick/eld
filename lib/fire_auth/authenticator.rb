@@ -65,7 +65,7 @@ module FireAuth
       end
     end
 
-    def handle_error(error)
+    def handle_error(_error)
       false
     end
   end
