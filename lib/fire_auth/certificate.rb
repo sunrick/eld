@@ -1,7 +1,7 @@
 module FireAuth
   class Certificate
     GOOGLE_CERTIFICATES_URL =
-    "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com".freeze
 
     def self.all
       FireAuth.cache.fetch do
