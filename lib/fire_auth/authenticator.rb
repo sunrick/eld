@@ -33,7 +33,7 @@ module FireAuth
 
       payload = decode_token(token, certificate.public_key)
 
-      valid_token?(payload) ? payload : false
+      valid_token?(payload) && payload
     rescue JWT::DecodeError => e
       handle_error(e)
     end
