@@ -47,6 +47,5 @@ RSpec/NestedGroups:
 RSpec/ExampleLength:
   Enabled: false
 
-
 RSpec/ContextWording:
   Enabled: false
