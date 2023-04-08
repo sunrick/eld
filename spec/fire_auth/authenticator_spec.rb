@@ -48,7 +48,7 @@ RSpec.describe FireAuth::Authenticator do
       expect(FireAuth.authenticate(token)).to eq(decoded_token)
     end
 
-    it "works when certficiate is cached" do
+    it "works when certificate is cached" do
       allow(HTTParty).to receive(
         :get
       ).with(
