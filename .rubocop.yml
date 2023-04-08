@@ -13,7 +13,7 @@ Layout/LineLength:
   Max: 120
 
 Gemspec/OrderedDependencies:
-  enabled: false
+  Enabled: false
 
 Layout/MultilineOperationIndentation:
-  enabled: false
+  Enabled: false
