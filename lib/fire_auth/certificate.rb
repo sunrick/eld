@@ -3,14 +3,14 @@
 module FireAuth
   class Certificate
     GOOGLE_CERTIFICATES_URL =
-    "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+      "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
 
     def self.all
       FireAuth.cache.fetch do
         response = HTTParty.get(GOOGLE_CERTIFICATES_URL)
 
         {
-          expires_at: Time.parse(response.headers['expires']).utc.to_i,
+          expires_at: Time.parse(response.headers["expires"]).utc.to_i,
           data: JSON.parse(response.body)
         }
       end
