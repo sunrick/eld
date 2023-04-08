@@ -20,7 +20,7 @@ module FireAuth
       end
 
       def set(&block)
-        response = yield
+        response = block.call
 
         @client.setex(
           @cache_key,
