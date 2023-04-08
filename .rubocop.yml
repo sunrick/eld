@@ -9,11 +9,14 @@ Style/StringLiteralsInInterpolation:
   Enabled: true
   EnforcedStyle: double_quotes
 
+Style/TrivialAccessors:
+  Enabled: false
+
 Layout/LineLength:
   Max: 120
 
-Gemspec/OrderedDependencies:
+Layout/MultilineOperationIndentation:
   Enabled: false
 
-Layout/MultilineOperationIndentation:
+Gemspec/OrderedDependencies:
   Enabled: false
