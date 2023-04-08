@@ -21,6 +21,9 @@ Layout/LineLength:
 Layout/MultilineOperationIndentation:
   Enabled: false
 
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
 Gemspec/OrderedDependencies:
   Enabled: false
 
