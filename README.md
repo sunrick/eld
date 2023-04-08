@@ -2,6 +2,8 @@
 
 A Ruby gem that helps you authenticate users with Firebase Authentication.
 
+<a href="https://codeclimate.com/github/sunrick/fire_auth/maintainability"><img src="https://api.codeclimate.com/v1/badges/5e8eadb4762ad371641c/maintainability" /></a>
+
 ## Installation
 
 Add this line to your application's Gemfile:
