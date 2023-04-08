@@ -12,6 +12,9 @@ Style/StringLiteralsInInterpolation:
 Style/TrivialAccessors:
   Enabled: false
 
+Style/Documentation:
+  Enabled: false
+
 Layout/LineLength:
   Max: 120
 
@@ -19,4 +22,7 @@ Layout/MultilineOperationIndentation:
   Enabled: false
 
 Gemspec/OrderedDependencies:
+  Enabled: false
+
+Metrics/AbcSize:
   Enabled: false
