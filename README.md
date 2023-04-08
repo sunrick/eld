@@ -28,11 +28,11 @@ Or install it yourself as:
 
 ```rb
 FireAuth.configure do |c|
-  c.firebase_id = 'YOUR_FIREBASE_PROJECT_ID'
+  c.firebase_id = "YOUR_FIREBASE_PROJECT_ID"
 end
 
 
-payload = FireAuth.authenticate('FIREBASE_ACCESS_TOKEN')
+payload = FireAuth.authenticate("FIREBASE_ACCESS_TOKEN")
 
 # =>
 {

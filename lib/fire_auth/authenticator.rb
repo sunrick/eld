@@ -5,7 +5,7 @@ require "httparty"
 
 module FireAuth
   class Authenticator
-    GOOGLE_ISS = "https://securetoken.google.com".freeze
+    GOOGLE_ISS = "https://securetoken.google.com"
 
     # See Firebase docs for implemenation details
     # https://firebase.google.com/docs/auth/admin/verify-id-tokens?authuser=0#verify_id_tokens_using_a_third-party_jwt_library
