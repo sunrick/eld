@@ -90,7 +90,7 @@ DEPENDENCIES
   rake (~> 13.0)
   redis
   rspec (~> 3.0)
-  rubocop
+  rubocop (~> 1.49)
   simplecov
   timecop (~> 0.9)
   vcr (~> 6.1)
