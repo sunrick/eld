@@ -50,76 +50,79 @@ RSpec.describe FireAuth::Authenticator do
       end
     end
 
-    context "token can be decoded" do
-      context "single firebase project" do
-        context "memory cache" do
-          it "returns decoded token" do
-            expect(FireAuth.authenticate(token)).to eq(decoded_token)
-          end
-
-          it "works when certficiate is cached" do
-            expect(HTTParty).to receive(
-              :get
-            ).with(
-              "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-            ).once.and_call_original
-
-            expect(FireAuth.authenticate(token)).to eq(decoded_token)
-            expect(FireAuth.authenticate(token)).to eq(decoded_token)
-          end
+    context "single firebase project" do
+      context "memory cache" do
+        it "returns decoded token" do
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
         end
 
-        context "redis cache", cache: :redis do
-          it "returns decoded token" do
-            expect(FireAuth.authenticate(token)).to eq(decoded_token)
-          end
+        it "works when certficiate is cached" do
+          allow(HTTParty).to receive(
+            :get
+          ).with(
+            "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+          ).once.and_call_original
 
-          it "works when certificates are cached" do
-            expect(HTTParty).to receive(
-              :get
-            ).with(
-              "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-            ).once.and_call_original
-
-            expect(FireAuth.authenticate(token)).to eq(decoded_token)
-            expect(FireAuth.authenticate(token)).to eq(decoded_token)
-          end
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
         end
       end
 
-      context "multiple firebase projects" do
-        let(:authenticator) { described_class.new(firebase_id: ["test1", firebase_id]) }
-
-        context "memory cache" do
-          it "returns decoded token" do
-            expect(FireAuth.authenticate(token)).to eq(decoded_token)
-          end
+      context "redis cache", cache: :redis do
+        it "returns decoded token" do
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
         end
 
-        context "redis cache", cache: :redis do
-          around do |example|
-            FireAuth.cache = FireAuth::Cache::Redis.new(
-              client: Redis.new
-            )
+        it "works when certificates are cached" do
+          allow(HTTParty).to receive(
+            :get
+          ).with(
+            "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+          ).once.and_call_original
 
-            example.run
-
-            FireAuth.cache = FireAuth::Cache::Memory.new
-          end
-
-          it "returns decoded token" do
-            expect(FireAuth.authenticate(token)).to eq(decoded_token)
-          end
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
         end
+      end
+    end
+
+    context "multiple firebase projects" do
+      let(:authenticator) { described_class.new(firebase_id: ["test1", firebase_id]) }
+
+      context "memory cache" do
+        it "returns decoded token" do
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+        end
+      end
+
+      context "redis cache", cache: :redis do
+        around do |example|
+          FireAuth.cache = FireAuth::Cache::Redis.new(
+            client: Redis.new
+          )
+
+          example.run
+
+          FireAuth.cache = FireAuth::Cache::Memory.new
+        end
+
+        it "returns decoded token" do
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+        end
+      end
+    end
+
+    context "bad payload" do
+      before do
+        allow(FireAuth.authenticator).to receive(:decode_token).and_return(
+          decoded_token
+        )
       end
 
       context "bad audience" do
         let(:aud) { "bad" }
 
         it "returns false" do
-          expect(FireAuth.authenticator).to receive(:decode_token).and_return(
-            decoded_token
-          )
           expect(FireAuth.authenticate(token)).to eq(false)
         end
       end
@@ -128,9 +131,6 @@ RSpec.describe FireAuth::Authenticator do
         let(:auth_time) { current_time }
 
         it "returns false" do
-          expect(FireAuth.authenticator).to receive(:decode_token).and_return(
-            decoded_token
-          )
           expect(FireAuth.authenticate(token)).to eq(false)
         end
       end
@@ -139,9 +139,6 @@ RSpec.describe FireAuth::Authenticator do
         let(:auth_time) { current_time + 5 }
 
         it "returns false" do
-          expect(FireAuth.authenticator).to receive(:decode_token).and_return(
-            decoded_token
-          )
           expect(FireAuth.authenticate(token)).to eq(false)
         end
       end
@@ -150,9 +147,6 @@ RSpec.describe FireAuth::Authenticator do
         let(:sub) { nil }
 
         it "returns false" do
-          expect(FireAuth.authenticator).to receive(:decode_token).and_return(
-            decoded_token
-          )
           expect(FireAuth.authenticate(token)).to eq(false)
         end
       end
@@ -161,9 +155,6 @@ RSpec.describe FireAuth::Authenticator do
         let(:sub) { "" }
 
         it "returns false" do
-          expect(FireAuth.authenticator).to receive(:decode_token).and_return(
-            decoded_token
-          )
           expect(FireAuth.authenticate(token)).to eq(false)
         end
       end
@@ -172,9 +163,6 @@ RSpec.describe FireAuth::Authenticator do
         let(:sub) { "bad" }
 
         it "returns false" do
-          expect(FireAuth.authenticator).to receive(:decode_token).and_return(
-            decoded_token
-          )
           expect(FireAuth.authenticate(token)).to eq(false)
         end
       end
@@ -183,9 +171,6 @@ RSpec.describe FireAuth::Authenticator do
         let(:iat) { current_time }
 
         it "returns false" do
-          expect(FireAuth.authenticator).to receive(:decode_token).and_return(
-            decoded_token
-          )
           expect(FireAuth.authenticate(token)).to eq(false)
         end
       end
@@ -194,9 +179,6 @@ RSpec.describe FireAuth::Authenticator do
         let(:iat) { current_time + 5 }
 
         it "returns false" do
-          expect(FireAuth.authenticator).to receive(:decode_token).and_return(
-            decoded_token
-          )
           expect(FireAuth.authenticate(token)).to eq(false)
         end
       end
@@ -205,9 +187,6 @@ RSpec.describe FireAuth::Authenticator do
         let(:exp) { current_time }
 
         it "returns false" do
-          expect(FireAuth.authenticator).to receive(:decode_token).and_return(
-            decoded_token
-          )
           expect(FireAuth.authenticate(token)).to eq(false)
         end
       end
@@ -216,9 +195,6 @@ RSpec.describe FireAuth::Authenticator do
         let(:exp) { current_time - 5 }
 
         it "returns false" do
-          expect(FireAuth.authenticator).to receive(:decode_token).and_return(
-            decoded_token
-          )
           expect(FireAuth.authenticate(token)).to eq(false)
         end
       end
@@ -227,9 +203,6 @@ RSpec.describe FireAuth::Authenticator do
         let(:iss) { "https://securetoken.google.com/bad" }
 
         it "returns false" do
-          expect(FireAuth.authenticator).to receive(:decode_token).and_return(
-            decoded_token
-          )
           expect(FireAuth.authenticate(token)).to eq(false)
         end
       end
