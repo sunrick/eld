@@ -43,6 +43,23 @@ RSpec.describe FireAuth::Authenticator do
     end
   end
 
+  shared_examples 'caches correctly' do
+    it "returns decoded token" do
+      expect(FireAuth.authenticate(token)).to eq(decoded_token)
+    end
+
+    it "works when certficiate is cached" do
+      allow(HTTParty).to receive(
+        :get
+      ).with(
+        "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+      ).once.and_call_original
+
+      expect(FireAuth.authenticate(token)).to eq(decoded_token)
+      expect(FireAuth.authenticate(token)).to eq(decoded_token)
+    end
+  end
+
   describe "#authenticate" do
     around do |example|
       VCR.use_cassette("google_certificates") do
@@ -52,37 +69,11 @@ RSpec.describe FireAuth::Authenticator do
 
     context "single firebase project" do
       context "memory cache" do
-        it "returns decoded token" do
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
-        end
-
-        it "works when certficiate is cached" do
-          allow(HTTParty).to receive(
-            :get
-          ).with(
-            "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-          ).once.and_call_original
-
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
-        end
+        include_examples "caches correctly"
       end
 
       context "redis cache", cache: :redis do
-        it "returns decoded token" do
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
-        end
-
-        it "works when certificates are cached" do
-          allow(HTTParty).to receive(
-            :get
-          ).with(
-            "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-          ).once.and_call_original
-
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
-        end
+        include_examples "caches correctly"
       end
     end
 
