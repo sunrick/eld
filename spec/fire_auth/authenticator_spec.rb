@@ -45,24 +45,24 @@ RSpec.describe FireAuth::Authenticator do
 
   shared_examples "caches correctly" do
     it "returns decoded token" do
-      expect(FireAuth.authenticate(token)).to eq(decoded_token)
-
-      expect(HTTParty).to have_received(
+      expect(HTTParty).to receive(
         :get
       ).with(
         "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-      ).once
+      ).once.and_call_original
+
+      expect(FireAuth.authenticate(token)).to eq(decoded_token)
     end
 
     it "works when certificate is cached" do
-      expect(FireAuth.authenticate(token)).to eq(decoded_token)
-      expect(FireAuth.authenticate(token)).to eq(decoded_token)
-
-      expect(HTTParty).to have_received(
+      expect(HTTParty).to receive(
         :get
       ).with(
         "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-      ).once
+      ).once.and_call_original
+
+      expect(FireAuth.authenticate(token)).to eq(decoded_token)
+      expect(FireAuth.authenticate(token)).to eq(decoded_token)
     end
   end
 
