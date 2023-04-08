@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
+        with:
+          ruby-version: '3.1'
+      - name: Install dependencies
+        run: bundle install
+      - name: Run tests
+        run: bundle exec rspec
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v3.2.0
+        env:
+          CC_TEST_REPORTER_ID: 68eda66796a5e172e5dd6450b753a0f943c65ee1a4e5c8678a37a527bf8e5131
