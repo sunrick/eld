@@ -9,17 +9,17 @@ module FireAuth
         @cache_key = cache_key
       end
 
-      def fetch
+      def fetch(&block)
         data = @client.get(@cache_key)
 
         if data
           JSON.parse(data)
         else
-          set { yield }
+          set(&block)
         end
       end
 
-      def set
+      def set(&block)
         response = yield
 
         @client.setex(
