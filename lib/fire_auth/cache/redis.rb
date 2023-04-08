@@ -3,15 +3,13 @@ module FireAuth
     class Redis
       def initialize(
         client:,
-        cache_key: 'fire_auth/certificates'
+        cache_key: "fire_auth/certificates"
       )
         @client = client
         @cache_key = cache_key
       end
 
       def fetch
-        current_time = Time.now.utc.to_i
-
         data = @client.get(@cache_key)
 
         if data
