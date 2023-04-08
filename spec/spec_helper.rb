@@ -4,7 +4,7 @@ require "fire_auth"
 require "vcr"
 require "pry"
 require "timecop"
-require 'simplecov'
+require "simplecov"
 require "simplecov_json_formatter"
 
 SimpleCov.formatter = SimpleCov::Formatter::JSONFormatter
@@ -27,14 +27,14 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  config.around(:each) do |example|
-    if example.metadata[:cache] == :redis
-      FireAuth.cache = FireAuth::Cache::Redis.new(
-        client: Redis.new
-      )
-    else
-      FireAuth.cache = FireAuth::Cache::Memory.new
-    end
+  config.around do |example|
+    FireAuth.cache = if example.metadata[:cache] == :redis
+                       FireAuth::Cache::Redis.new(
+                         client: Redis.new
+                       )
+                     else
+                       FireAuth::Cache::Memory.new
+                     end
 
     FireAuth.cache.clear
 

@@ -1,4 +1,4 @@
-require 'redis'
+require "redis"
 
 RSpec.describe FireAuth::Authenticator do
   let(:token) do
@@ -41,7 +41,7 @@ RSpec.describe FireAuth::Authenticator do
     end
   end
 
-  context "#authenticate" do
+  describe "#authenticate" do
     around do |example|
       VCR.use_cassette("google_certificates") do
         Timecop.freeze(Time.at(current_time).utc) { example.run }
@@ -50,12 +50,12 @@ RSpec.describe FireAuth::Authenticator do
 
     context "token can be decoded" do
       context "single firebase project" do
-        context 'memory cache' do
+        context "memory cache" do
           it "returns decoded token" do
             expect(FireAuth.authenticate(token)).to eq(decoded_token)
           end
 
-          it 'works when certficiate is cached' do
+          it "works when certficiate is cached" do
             expect(HTTParty).to receive(
               :get
             ).with(
@@ -67,12 +67,12 @@ RSpec.describe FireAuth::Authenticator do
           end
         end
 
-        context 'redis cache', cache: :redis do
+        context "redis cache", cache: :redis do
           it "returns decoded token" do
             expect(FireAuth.authenticate(token)).to eq(decoded_token)
           end
 
-          it 'works when certificates are cached' do
+          it "works when certificates are cached" do
             expect(HTTParty).to receive(
               :get
             ).with(
@@ -88,14 +88,14 @@ RSpec.describe FireAuth::Authenticator do
       context "multiple firebase projects" do
         let(:authenticator) { FireAuth::Authenticator.new(firebase_id: ["test1", firebase_id]) }
 
-        context 'memory cache' do
+        context "memory cache" do
           it "returns decoded token" do
             expect(FireAuth.authenticate(token)).to eq(decoded_token)
           end
         end
 
-        context 'redis cache', cache: :redis do
-          around(:each) do |example|
+        context "redis cache", cache: :redis do
+          around do |example|
             FireAuth.cache = FireAuth::Cache::Redis.new(
               client: Redis.new
             )
