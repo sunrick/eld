@@ -15,6 +15,9 @@ Style/TrivialAccessors:
 Style/Documentation:
   Enabled: false
 
+Style/HashSyntax:
+  Enabled: false
+
 Layout/LineLength:
   Max: 120
 
