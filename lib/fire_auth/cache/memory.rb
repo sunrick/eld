@@ -7,18 +7,18 @@ module FireAuth
         @storage = {}
       end
 
-      def fetch
+      def fetch(&block)
         current_time = Time.now.utc.to_i
 
         if @storage[:data] && @storage[:expires_at] > current_time
           @storage[:data]
         else
-          set { yield }
+          set(&block)
         end
       end
 
-      def set
-        response = yield
+      def set(&block)
+        response = block.call
 
         @storage = response
 
