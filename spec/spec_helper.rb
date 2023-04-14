@@ -7,8 +7,8 @@ require "timecop"
 require "simplecov"
 require "simplecov_json_formatter"
 
+Timecop.safe_mode = true
 SimpleCov.formatter = SimpleCov::Formatter::JSONFormatter
-
 SimpleCov.start
 
 VCR.configure do |config|

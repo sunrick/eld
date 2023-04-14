@@ -30,12 +30,6 @@ RSpec.describe FireAuth::Authenticator do
   end
 
   describe "#authenticate" do
-    around do |example|
-      VCR.use_cassette("google_certificates") do
-        Timecop.freeze(Time.at(current_time).utc) { example.run }
-      end
-    end
-
     context "single firebase project" do
       context "memory cache" do
         include_examples "caches correctly"
@@ -49,24 +43,12 @@ RSpec.describe FireAuth::Authenticator do
     context "multiple firebase projects" do
       let(:authenticator) { described_class.new(firebase_id: ["test1", firebase_id]) }
 
-      context "memory cache" do
-        it "returns decoded token" do
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
-        end
+      it "returns decoded token" do
+        expect(FireAuth.authenticate(token)).to eq(decoded_token)
       end
 
-      context "redis cache", cache: :redis do
-        around do |example|
-          FireAuth.cache = FireAuth::Cache::Redis.new(
-            client: Redis.new
-          )
-
-          example.run
-
-          FireAuth.cache = FireAuth::Cache::Memory.new
-        end
-
-        it "returns decoded token" do
+      context "with redis cache", cache: :redis do
+        it "returns decoded token with redis cache" do
           expect(FireAuth.authenticate(token)).to eq(decoded_token)
         end
       end

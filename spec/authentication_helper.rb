@@ -38,4 +38,10 @@ RSpec.shared_context 'Authentication' do
       c.firebase_id = firebase_id
     end
   end
+
+  around do |example|
+    VCR.use_cassette("google_certificates") do
+      Timecop.freeze(Time.at(current_time).utc) { example.run }
+    end
+  end
 end
