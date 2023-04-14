@@ -26,16 +26,10 @@ Or install it yourself as:
 
 ## Usage
 
-By default FireAuth is designed to be simple as possible. It's up to you how you want to build on top of FireAuth.
-
-FireAuth allows you to take a Firebase access token from your frontend of choice and decode it. Once you've decoded the token, the rest is up to you!
+By default FireAuth is designed to be simple as possible and can be used with any Ruby application.
+FireAuth takes a Firebase access token from your frontend of choice and decodes it. Once you've decoded the token, the rest is up to you!
 
 See [Firebase Authentication](https://firebase.google.com/docs/auth) for example client implementations.
-
-
-### Basic Usage
-
-FireAuth is designed to work with any Ruby application. As long as you have a way of getting a Firebase access token to your app, you are good to go. Use it with Sinatra, Roda, or Rails. Up to you!
 
 ```rb
 FireAuth.configure do |c|
@@ -87,37 +81,6 @@ FireAuth.configure do |c|
 end
 ```
 
-### Rails Example
-
-```rb
-class ApplicationController < ActionController::Base
-  before_action :authenticate_user!
-  helper_method :current_user
-
-  def authenticate_user!
-    @current_user = nil
-
-    token = request.headers["X-Authentication"]
-    decoded_token = FireAuth.authenticate(token)
-
-    if payload
-      # Find a User from DB?
-      # Find or create a User?
-      @current_user = User.find_by(uid: decoded_token['user_id'])
-
-      # Wrap data in a User object?
-      @current_user = User.new(decoded_token)
-    end
-
-    head :unauthorized unless @current_user
-  end
-
-  def current_user
-    @current_user
-  end
-end
-```
-
 ### Custom Authenticators
 
 FireAuth is designed to use a default authenticator but you can also create your own authenticator and use it as a new default or build it anywhere.
@@ -150,6 +113,45 @@ FireAuth.authenticate(token)
 authenticator = CustomAuthenticator.new(firebase_id: "FIREBASE_PROJECT_ID")
 authenticator.authenticate(token)
 # => User(uid: "1231231")
+```
+
+### Rails Example
+
+```rb
+class ApplicationController < ActionController::Base
+  before_action :authenticate_user!
+  helper_method :current_user
+
+  def authenticate_user!
+    @current_user = nil
+
+    token = request.headers["X-Authentication"]
+    decoded_token = FireAuth.authenticate(token)
+
+    if payload
+      # Find a User from DB?
+      # Find or create a User?
+      @current_user = User.find_by(uid: decoded_token['user_id'])
+
+      # Wrap data in a User object?
+      @current_user = User.new(decoded_token)
+    end
+
+    head :unauthorized unless @current_user
+  end
+
+  def current_user
+    @current_user
+  end
+end
+```
+
+### Certificates
+
+The default behavior of FireAuth is to lazily handle caching and fetching certificates from Google when authenticating tokens. This means you don't have to worry about refreshing certificates at any particular interval. However, you can refresh the cache and fetch new certificates whenever you want should you need to.
+
+```rb
+FireAuth::Certificate.refresh
 ```
 
 ## Development

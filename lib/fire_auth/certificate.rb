@@ -21,5 +21,10 @@ module FireAuth
 
       OpenSSL::X509::Certificate.new(certificate)
     end
+
+    def self.refresh
+      FireAuth.cache.clear
+      all
+    end
   end
 end
