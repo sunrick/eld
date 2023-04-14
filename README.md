@@ -26,16 +26,23 @@ Or install it yourself as:
 
 ## Usage
 
+By default FireAuth is designed to be simple as possible. It's up to you how you want to build on top of FireAuth.
+
+FireAuth allows you to take a Firebase access token from your frontend of choice and decode it. Once you've decoded the token, the rest is up to you!
+
+See [Firebase Authentication](https://firebase.google.com/docs/auth) for example client implementations.
+
+
 ### Basic Usage
+
+FireAuth is designed to work with any Ruby application. As long as you have a way of getting a Firebase access token to your app, you are good to go. Use it with Sinatra, Roda, or Rails. Up to you!
 
 ```rb
 FireAuth.configure do |c|
   c.firebase_id = "YOUR_FIREBASE_PROJECT_ID"
 end
 
-
-payload = FireAuth.authenticate("FIREBASE_ACCESS_TOKEN")
-
+decoded_token = FireAuth.authenticate("FIREBASE_ACCESS_TOKEN")
 # =>
 {
   "iss" => "https://securetoken.google.com/fire-auth-67d5f",
@@ -54,6 +61,8 @@ payload = FireAuth.authenticate("FIREBASE_ACCESS_TOKEN")
     "sign_in_provider"=>"password"
   }
 }
+
+user = User.new(decoded_token)
 ```
 
 ### Advanced Setup
@@ -75,6 +84,36 @@ FireAuth.configure do |c|
   # Use your own authenticator
   # See FireAuth::Authenticator for an example implementation.
   c.authenticator = CustomAuthenticator
+end
+```
+
+### Rails Example
+
+```rb
+class ApplicationController < ActionController::Base
+  before_action :authenticate_user!
+  helper_method :current_user
+
+  def authenticate_user!
+    @current_user = nil
+
+    token = request.headers["X-Authentication"]
+    decoded_token = FireAuth.authenticate(token)
+
+    if payload
+      # Find a User from DB?
+      @current_user = User.find_by(uid: decoded_token['user_id'])
+
+      # Wrap data in a User object?
+      @current_user = User.new(decoded_token)
+    end
+
+    head :unauthorized unless @current_user
+  end
+
+  def current_user
+    @current_user
+  end
 end
 ```
 
