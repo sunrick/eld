@@ -29,7 +29,7 @@ module FireAuth
     end
 
     def authenticator=(value)
-      @authenticator = value
+      @authenticator = value.new(firebase_id: firebase_id)
     end
 
     def cache

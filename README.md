@@ -26,6 +26,8 @@ Or install it yourself as:
 
 ## Usage
 
+### Basic Usage
+
 ```rb
 FireAuth.configure do |c|
   c.firebase_id = "YOUR_FIREBASE_PROJECT_ID"
@@ -52,6 +54,28 @@ payload = FireAuth.authenticate("FIREBASE_ACCESS_TOKEN")
     "sign_in_provider"=>"password"
   }
 }
+```
+
+### Advanced Setup
+
+```rb
+FireAuth.configure do |c|
+  # Use one or more Firebase projects
+  c.firebase_id = "YOUR_FIREBASE_PROJECT_ID"
+  # c.firebase_id = ["YOUR_FIREBASE_PROJECT_ID_1", "YOUR_FIREBASE_PROJECT_ID_2"]
+
+  # Use Redis to cache (recommended)
+  # By default we use FireAuth::Cache::Memory
+  # You can also create your own cache implementation.
+  c.cache = FireAuth::Cache::Redis.new(
+    client: Redis.new, # Your redis client
+    cache_key "fire_auth/certificates" # Optional: This is the default key
+  )
+
+  # Use your own authenticator
+  # See FireAuth::Authenticator for an example implementation.
+  c.authenticator = CustomAuthenticator
+end
 ```
 
 ## Development
