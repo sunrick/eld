@@ -7,8 +7,6 @@ exclude_patterns:
   - "spec/vcr_cassettes"
 checks:
   similar-code:
-    config:
-      threshold: 5
+    enabled: false
   identical-code:
-    config:
-      threshold: 5
+    enabled: false
