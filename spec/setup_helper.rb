@@ -12,14 +12,13 @@ RSpec.shared_context 'Setup' do
   around do |example|
     VCR.use_cassette("google_certificates", allow_playback_repeats: true) do
       Timecop.freeze(Time.at(current_time).utc) do
-
         FireAuth.cache = if example.metadata[:cache] == :redis
-          FireAuth::Cache::Redis.new(
-            client: redis
-          )
-        else
-          FireAuth::Cache::Memory.new
-        end
+                            FireAuth::Cache::Redis.new(
+                              client: redis
+                            )
+                         else
+                            FireAuth::Cache::Memory.new
+                         end
 
         FireAuth.cache.clear
 
