@@ -24,10 +24,13 @@ module FireAuth
       def set(&block)
         response = block.call
 
-        @client.setex(
+        # We calculate ex in seconds instead of using exat for
+        # specs. Not ideal but good enough.
+        # Probably should mock redis calls in tests.
+        @client.set(
           @cache_key,
-          response[:expires_at],
-          response[:data].to_json
+          response[:data].to_json,
+          ex: response[:expires_at] - Time.now.utc.to_i
         )
 
         response[:data]

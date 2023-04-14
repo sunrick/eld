@@ -26,18 +26,4 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
-
-  config.around do |example|
-    FireAuth.cache = if example.metadata[:cache] == :redis
-                       FireAuth::Cache::Redis.new(
-                         client: Redis.new
-                       )
-                     else
-                       FireAuth::Cache::Memory.new
-                     end
-
-    FireAuth.cache.clear
-
-    example.run
-  end
 end
