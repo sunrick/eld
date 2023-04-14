@@ -92,7 +92,7 @@ FireAuth::Certificate.refresh
 
 ### Custom Authenticators
 
-FireAuth is designed to use a default authenticator but you can also create your own authenticator and use it as a new default or build it anywhere.
+You can create your own authenticator and use it as a new default or build it anywhere.
 
 Custom authenticators will still use FireAuth defaults for caching.
 
