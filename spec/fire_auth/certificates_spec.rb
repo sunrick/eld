@@ -9,7 +9,7 @@ RSpec.describe FireAuth::Certificate do
   let(:first_kid) { "1e973ee0e16f7eef4f921d50dc61d70b2efefc19" }
   let(:second_kid) { "979ed15597ab35f7829ce744307b793b7ebeb2f0" }
 
-  context '.find' do
+  context ".find" do
     context "with redis", cache: :redis do
       context "when certificate has not been cached" do
         it "finds certificates" do
@@ -102,10 +102,10 @@ RSpec.describe FireAuth::Certificate do
     end
   end
 
-  context '.refresh' do
+  context ".refresh" do
     context "with redis", cache: :redis do
       context "when certificate has not been cached" do
-        it 'refreshes' do
+        it "refreshes" do
           expect(HTTParty).to receive(:get).and_call_original
           expect(described_class.refresh).not_to be_nil
         end
@@ -123,7 +123,7 @@ RSpec.describe FireAuth::Certificate do
 
     context "with memory" do
       context "when certificate has not been cached" do
-        it 'refreshes' do
+        it "refreshes" do
           expect(HTTParty).to receive(:get).and_call_original
           expect(described_class.refresh).not_to be_nil
         end
