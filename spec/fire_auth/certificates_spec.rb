@@ -23,7 +23,7 @@ RSpec.describe FireAuth::Certificate do
     end
 
     context "when certificate has been cached" do
-      before { FireAuth::Certificate.all }
+      before { described_class.all }
 
       it "finds certificates" do
         expect(HTTParty).not_to receive(:get)
@@ -41,7 +41,7 @@ RSpec.describe FireAuth::Certificate do
           "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
         ).twice.and_call_original
 
-        FireAuth::Certificate.all
+        described_class.all
 
         allow(redis).to receive(:get).and_return(nil)
 
@@ -73,7 +73,7 @@ RSpec.describe FireAuth::Certificate do
     end
 
     context "when certificate has been cached" do
-      before { FireAuth::Certificate.all }
+      before { described_class.all }
 
       it "finds certificates" do
         expect(HTTParty).not_to receive(:get)
@@ -90,7 +90,7 @@ RSpec.describe FireAuth::Certificate do
           "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
         ).twice.and_call_original
 
-        FireAuth::Certificate.all
+        described_class.all
 
         Timecop.freeze(expires_at + 10) do
           expect(described_class.find(first_kid)).not_to be_nil
