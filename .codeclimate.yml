@@ -5,3 +5,10 @@ plugins:
 exclude_patterns:
   - "!spec/"
   - "spec/vcr_cassettes"
+checks:
+  similar-code:
+    config:
+      threshold: 5
+  identical-code:
+    config:
+      threshold: 5
