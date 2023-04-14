@@ -37,49 +37,66 @@ RSpec.describe FireAuth::Authenticator do
     }
   end
 
-  shared_examples "caches correctly" do
-    it "returns decoded token" do
-      expect(HTTParty).to receive(
-        :get
-      ).with(
-        "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-      ).once.and_call_original
-
-      expect(FireAuth.authenticate(token)).to eq(decoded_token)
-    end
-
-    it "works when certificate is cached" do
-      expect(HTTParty).to receive(
-        :get
-      ).with(
-        "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
-      ).once.and_call_original
-
-      expect(FireAuth.authenticate(token)).to eq(decoded_token)
-      expect(FireAuth.authenticate(token)).to eq(decoded_token)
-    end
-  end
-
   describe "#authenticate" do
     context "single firebase project" do
       context "memory cache" do
-        include_examples "caches correctly"
+        it "returns decoded token" do
+          expect(HTTParty).to receive(
+            :get
+          ).with(
+            "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+          ).once.and_call_original
+
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+        end
+
+        it "works when certificate is cached" do
+          expect(HTTParty).to receive(
+            :get
+          ).with(
+            "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+          ).once.and_call_original
+
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+        end
       end
 
       context "redis cache", cache: :redis do
-        include_examples "caches correctly"
+        it "returns decoded token" do
+          expect(HTTParty).to receive(
+            :get
+          ).with(
+            "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+          ).once.and_call_original
+
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+        end
+
+        it "works when certificate is cached" do
+          expect(HTTParty).to receive(
+            :get
+          ).with(
+            "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+          ).once.and_call_original
+
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+        end
       end
     end
 
     context "multiple firebase projects" do
       let(:authenticator) { described_class.new(firebase_id: ["test1", firebase_id]) }
 
-      it "returns decoded token" do
-        expect(FireAuth.authenticate(token)).to eq(decoded_token)
+      context "with memory cache" do
+        it "returns decoded token" do
+          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+        end
       end
 
       context "with redis cache", cache: :redis do
-        it "returns decoded token with redis cache" do
+        it "returns decoded token" do
           expect(FireAuth.authenticate(token)).to eq(decoded_token)
         end
       end
