@@ -27,10 +27,11 @@ Or install it yourself as:
 ## Usage
 
 By default FireAuth is designed to be simple as possible and can be used with any Ruby application.
-FireAuth takes a Firebase access token from your frontend of choice and decodes it. Once you've decoded the token, the rest is up to you!
+FireAuth takes a Firebase access token and decodes it. Once you've decoded the token, the rest is up to you!
 
 See [Firebase Authentication](https://firebase.google.com/docs/auth) for example client implementations.
 
+### Basic Usage
 ```rb
 FireAuth.configure do |c|
   c.firebase_id = "FIREBASE_PROJECT_ID"
@@ -81,6 +82,14 @@ FireAuth.configure do |c|
 end
 ```
 
+### Certificates
+
+The default behavior of FireAuth is to lazily handle caching and fetching certificates from Google when authenticating tokens. This means you don't have to worry about refreshing certificates at any particular interval. However, you can refresh the cache and fetch new certificates whenever you want should you need to.
+
+```rb
+FireAuth::Certificate.refresh
+```
+
 ### Custom Authenticators
 
 FireAuth is designed to use a default authenticator but you can also create your own authenticator and use it as a new default or build it anywhere.
@@ -125,7 +134,7 @@ class ApplicationController < ActionController::Base
   def authenticate_user!
     @current_user = nil
 
-    token = request.headers["X-Authentication"]
+    token = request.headers["X-Access-Token"]
     decoded_token = FireAuth.authenticate(token)
 
     if payload
@@ -144,14 +153,6 @@ class ApplicationController < ActionController::Base
     @current_user
   end
 end
-```
-
-### Certificates
-
-The default behavior of FireAuth is to lazily handle caching and fetching certificates from Google when authenticating tokens. This means you don't have to worry about refreshing certificates at any particular interval. However, you can refresh the cache and fetch new certificates whenever you want should you need to.
-
-```rb
-FireAuth::Certificate.refresh
 ```
 
 ## Development
