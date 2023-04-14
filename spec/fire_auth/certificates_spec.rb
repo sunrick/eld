@@ -17,8 +17,8 @@ RSpec.describe FireAuth::Certificate do
           "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
         ).once.and_call_original
 
-        expect(described_class.find(first_kid)).to_not be_nil
-        expect(described_class.find(second_kid)).to_not be_nil
+        expect(described_class.find(first_kid)).not_to be_nil
+        expect(described_class.find(second_kid)).not_to be_nil
       end
     end
 
@@ -26,10 +26,10 @@ RSpec.describe FireAuth::Certificate do
       before { FireAuth::Certificate.all }
 
       it "finds certificates" do
-        expect(HTTParty).to_not receive(:get)
+        expect(HTTParty).not_to receive(:get)
 
-        expect(described_class.find(first_kid)).to_not be_nil
-        expect(described_class.find(second_kid)).to_not be_nil
+        expect(described_class.find(first_kid)).not_to be_nil
+        expect(described_class.find(second_kid)).not_to be_nil
       end
     end
 
@@ -52,7 +52,7 @@ RSpec.describe FireAuth::Certificate do
             ex: anything
           )
 
-          expect(described_class.find(first_kid)).to_not be_nil
+          expect(described_class.find(first_kid)).not_to be_nil
         end
       end
     end
@@ -67,8 +67,8 @@ RSpec.describe FireAuth::Certificate do
           "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
         ).once.and_call_original
 
-        expect(described_class.find(first_kid)).to_not be_nil
-        expect(described_class.find(second_kid)).to_not be_nil
+        expect(described_class.find(first_kid)).not_to be_nil
+        expect(described_class.find(second_kid)).not_to be_nil
       end
     end
 
@@ -76,9 +76,9 @@ RSpec.describe FireAuth::Certificate do
       before { FireAuth::Certificate.all }
 
       it "finds certificates" do
-        expect(HTTParty).to_not receive(:get)
+        expect(HTTParty).not_to receive(:get)
 
-        expect(described_class.find(second_kid)).to_not be_nil
+        expect(described_class.find(second_kid)).not_to be_nil
       end
     end
 
@@ -93,7 +93,7 @@ RSpec.describe FireAuth::Certificate do
         FireAuth::Certificate.all
 
         Timecop.freeze(expires_at + 10) do
-          expect(described_class.find(first_kid)).to_not be_nil
+          expect(described_class.find(first_kid)).not_to be_nil
         end
       end
     end
