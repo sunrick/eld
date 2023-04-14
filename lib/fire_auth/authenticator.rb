@@ -31,9 +31,9 @@ module FireAuth
 
       certificate = FireAuth::Certificate.find(kid)
 
-      payload = decode_token(token, certificate.public_key)
+      decoded_token = decode_token(token, certificate.public_key)
 
-      valid_token?(payload) && payload
+      valid_token?(decoded_token) && respond(decoded_token)
     rescue JWT::DecodeError => e
       handle_error(e)
     end
@@ -48,27 +48,31 @@ module FireAuth
       ).first
     end
 
-    def valid_token?(payload)
+    def valid_token?(decoded_token)
       current_time = Time.now.utc.to_i
 
-      !payload.empty? &&
-      payload["exp"].to_i > current_time &&
-      payload["iat"].to_i < current_time &&
-      payload["auth_time"].to_i < current_time &&
-      valid_sub?(payload) &&
-      valid_firebase_id?(payload)
+      !decoded_token.empty? &&
+      decoded_token["exp"].to_i > current_time &&
+      decoded_token["iat"].to_i < current_time &&
+      decoded_token["auth_time"].to_i < current_time &&
+      valid_sub?(decoded_token) &&
+      valid_firebase_id?(decoded_token)
     end
 
-    def valid_sub?(payload)
-      !payload["sub"].nil? &&
-      !payload["sub"].empty? &&
-      payload["sub"] == payload["user_id"]
+    def valid_sub?(decoded_token)
+      !decoded_token["sub"].nil? &&
+      !decoded_token["sub"].empty? &&
+      decoded_token["sub"] == decoded_token["user_id"]
     end
 
-    def valid_firebase_id?(payload)
+    def valid_firebase_id?(decoded_token)
       @firebase_id.any? do |id|
-        payload["aud"] == id && payload["iss"] == "#{GOOGLE_ISS}/#{id}"
+        decoded_token["aud"] == id && decoded_token["iss"] == "#{GOOGLE_ISS}/#{id}"
       end
+    end
+
+    def respond(decoded_token)
+      decoded_token
     end
 
     def handle_error(_error)

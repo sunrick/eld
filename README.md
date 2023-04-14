@@ -39,7 +39,7 @@ FireAuth is designed to work with any Ruby application. As long as you have a wa
 
 ```rb
 FireAuth.configure do |c|
-  c.firebase_id = "YOUR_FIREBASE_PROJECT_ID"
+  c.firebase_id = "FIREBASE_PROJECT_ID"
 end
 
 decoded_token = FireAuth.authenticate("FIREBASE_ACCESS_TOKEN")
@@ -70,8 +70,8 @@ user = User.new(decoded_token)
 ```rb
 FireAuth.configure do |c|
   # Use one or more Firebase projects
-  c.firebase_id = "YOUR_FIREBASE_PROJECT_ID"
-  # c.firebase_id = ["YOUR_FIREBASE_PROJECT_ID_1", "YOUR_FIREBASE_PROJECT_ID_2"]
+  c.firebase_id = "FIREBASE_PROJECT_ID"
+  # c.firebase_id = ["FIREBASE_PROJECT_ID_1", "FIREBASE_PROJECT_ID_2"]
 
   # Use Redis to cache (recommended)
   # By default we use FireAuth::Cache::Memory
@@ -102,6 +102,7 @@ class ApplicationController < ActionController::Base
 
     if payload
       # Find a User from DB?
+      # Find or create a User?
       @current_user = User.find_by(uid: decoded_token['user_id'])
 
       # Wrap data in a User object?
@@ -115,6 +116,40 @@ class ApplicationController < ActionController::Base
     @current_user
   end
 end
+```
+
+### Custom Authenticators
+
+FireAuth is designed to use a default authenticator but you can also create your own authenticator and use it as a new default or build it anywhere.
+
+Custom authenticators will still use FireAuth defaults for caching.
+
+```rb
+class CustomAuthenticator < FireAuth::Authenticator
+  # The default behavior is to return the decoded token
+  # You could add additional behavior like finding or instantiating
+  # a user.
+  def respond(decoded_token)
+    User.find_by(uid: decoded_token['user_id'])
+  end
+
+  # The default authenticator swallows JWT errors
+  # You might want to handle them on your own.
+  def handle_error(error)
+    ReportError.call(error)
+    false
+  end
+end
+
+# Set a new default authenticator
+FireAuth.authenticator = CustomAuthenticator
+FireAuth.authenticate(token)
+# => User(uid: "1231231")
+
+# Instantiate your own authenticator
+authenticator = CustomAuthenticator.new(firebase_id: "FIREBASE_PROJECT_ID")
+authenticator.authenticate(token)
+# => User(uid: "1231231")
 ```
 
 ## Development
