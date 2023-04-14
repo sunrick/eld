@@ -1,4 +1,5 @@
-require "redis"
+# frozen_string_literal: true
+
 require_relative "../setup_helper"
 
 RSpec.describe FireAuth::Certificate do

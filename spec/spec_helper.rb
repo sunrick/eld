@@ -2,6 +2,7 @@
 
 require "fire_auth"
 require "vcr"
+require "redis"
 require "pry"
 require "timecop"
 require "simplecov"
