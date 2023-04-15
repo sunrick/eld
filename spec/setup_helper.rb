@@ -15,12 +15,12 @@ RSpec.shared_context "Setup" do
     VCR.use_cassette("google_certificates", allow_playback_repeats: true) do
       Timecop.freeze(Time.at(current_time).utc) do
         Eld.cache = if example.metadata[:cache] == :redis
-                           Eld::Cache::Redis.new(
-                             client: redis
-                           )
-                         else
-                           Eld::Cache::Memory.new
-                         end
+                      Eld::Cache::Redis.new(
+                        client: redis
+                      )
+                    else
+                      Eld::Cache::Memory.new
+                    end
 
         Eld.cache.clear
 
