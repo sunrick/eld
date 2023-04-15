@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "fire_auth/version"
-require_relative "fire_auth/cache"
-require_relative "fire_auth/certificate"
-require_relative "fire_auth/authenticator"
+require_relative "eld/version"
+require_relative "eld/cache"
+require_relative "eld/certificate"
+require_relative "eld/authenticator"
 
-module FireAuth
+module Eld
   class Error < StandardError
   end
 
@@ -23,7 +23,7 @@ module FireAuth
     end
 
     def authenticator
-      @authenticator ||= FireAuth::Authenticator.new(
+      @authenticator ||= Eld::Authenticator.new(
         firebase_id: firebase_id
       )
     end
@@ -33,7 +33,7 @@ module FireAuth
     end
 
     def cache
-      @cache ||= FireAuth::Cache::Memory.new
+      @cache ||= Eld::Cache::Memory.new
     end
 
     def cache=(value)

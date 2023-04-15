@@ -2,7 +2,7 @@
 
 require_relative "../setup_helper"
 
-RSpec.describe FireAuth::Certificate do
+RSpec.describe Eld::Certificate do
   include_context "Setup"
 
   let(:expires_at) { Time.parse("Fri, 24 Mar 2023 02:01:54 GMT").utc.to_i }
@@ -49,7 +49,7 @@ RSpec.describe FireAuth::Certificate do
 
           Timecop.freeze(expires_at + 10) do
             expect(redis).to receive(:set).with(
-              "fire_auth/certificates",
+              "eld/certificates",
               anything,
               ex: anything
             )

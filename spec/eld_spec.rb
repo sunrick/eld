@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-RSpec.describe FireAuth do
+RSpec.describe Eld do
   it "has a version number" do
-    expect(FireAuth::VERSION).not_to be nil
+    expect(Eld::VERSION).not_to be nil
   end
 end

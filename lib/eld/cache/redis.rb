@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-module FireAuth
+module Eld
   module Cache
     class Redis
       def initialize(
         client:,
-        cache_key: "fire_auth/certificates"
+        cache_key: "eld/certificates"
       )
         @client = client
         @cache_key = cache_key

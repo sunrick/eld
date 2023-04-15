@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
-require "fire_auth"
+require "eld"
 require "pry"
 
 Pry.start

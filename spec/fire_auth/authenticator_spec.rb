@@ -2,7 +2,7 @@
 
 require_relative "../setup_helper"
 
-RSpec.describe FireAuth::Authenticator do
+RSpec.describe Eld::Authenticator do
   include_context "Setup"
 
   let(:token) do
@@ -47,7 +47,7 @@ RSpec.describe FireAuth::Authenticator do
             "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
           ).once.and_call_original
 
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+          expect(Eld.authenticate(token)).to eq(decoded_token)
         end
 
         it "works when certificate is cached" do
@@ -57,8 +57,8 @@ RSpec.describe FireAuth::Authenticator do
             "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
           ).once.and_call_original
 
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+          expect(Eld.authenticate(token)).to eq(decoded_token)
+          expect(Eld.authenticate(token)).to eq(decoded_token)
         end
       end
 
@@ -70,7 +70,7 @@ RSpec.describe FireAuth::Authenticator do
             "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
           ).once.and_call_original
 
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+          expect(Eld.authenticate(token)).to eq(decoded_token)
         end
 
         it "works when certificate is cached" do
@@ -80,8 +80,8 @@ RSpec.describe FireAuth::Authenticator do
             "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
           ).once.and_call_original
 
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+          expect(Eld.authenticate(token)).to eq(decoded_token)
+          expect(Eld.authenticate(token)).to eq(decoded_token)
         end
       end
     end
@@ -91,20 +91,20 @@ RSpec.describe FireAuth::Authenticator do
 
       context "with memory cache" do
         it "returns decoded token" do
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+          expect(Eld.authenticate(token)).to eq(decoded_token)
         end
       end
 
       context "with redis cache", cache: :redis do
         it "returns decoded token" do
-          expect(FireAuth.authenticate(token)).to eq(decoded_token)
+          expect(Eld.authenticate(token)).to eq(decoded_token)
         end
       end
     end
 
     context "bad payload" do
       before do
-        allow(FireAuth.authenticator).to receive(:decode_token).and_return(
+        allow(Eld.authenticator).to receive(:decode_token).and_return(
           decoded_token
         )
       end
@@ -113,7 +113,7 @@ RSpec.describe FireAuth::Authenticator do
         let(:aud) { "bad" }
 
         it "returns false" do
-          expect(FireAuth.authenticate(token)).to eq(false)
+          expect(Eld.authenticate(token)).to eq(false)
         end
       end
 
@@ -121,7 +121,7 @@ RSpec.describe FireAuth::Authenticator do
         let(:auth_time) { current_time }
 
         it "returns false" do
-          expect(FireAuth.authenticate(token)).to eq(false)
+          expect(Eld.authenticate(token)).to eq(false)
         end
       end
 
@@ -129,7 +129,7 @@ RSpec.describe FireAuth::Authenticator do
         let(:auth_time) { current_time + 5 }
 
         it "returns false" do
-          expect(FireAuth.authenticate(token)).to eq(false)
+          expect(Eld.authenticate(token)).to eq(false)
         end
       end
 
@@ -137,7 +137,7 @@ RSpec.describe FireAuth::Authenticator do
         let(:sub) { nil }
 
         it "returns false" do
-          expect(FireAuth.authenticate(token)).to eq(false)
+          expect(Eld.authenticate(token)).to eq(false)
         end
       end
 
@@ -145,7 +145,7 @@ RSpec.describe FireAuth::Authenticator do
         let(:sub) { "" }
 
         it "returns false" do
-          expect(FireAuth.authenticate(token)).to eq(false)
+          expect(Eld.authenticate(token)).to eq(false)
         end
       end
 
@@ -153,7 +153,7 @@ RSpec.describe FireAuth::Authenticator do
         let(:sub) { "bad" }
 
         it "returns false" do
-          expect(FireAuth.authenticate(token)).to eq(false)
+          expect(Eld.authenticate(token)).to eq(false)
         end
       end
 
@@ -161,7 +161,7 @@ RSpec.describe FireAuth::Authenticator do
         let(:iat) { current_time }
 
         it "returns false" do
-          expect(FireAuth.authenticate(token)).to eq(false)
+          expect(Eld.authenticate(token)).to eq(false)
         end
       end
 
@@ -169,7 +169,7 @@ RSpec.describe FireAuth::Authenticator do
         let(:iat) { current_time + 5 }
 
         it "returns false" do
-          expect(FireAuth.authenticate(token)).to eq(false)
+          expect(Eld.authenticate(token)).to eq(false)
         end
       end
 
@@ -177,7 +177,7 @@ RSpec.describe FireAuth::Authenticator do
         let(:exp) { current_time }
 
         it "returns false" do
-          expect(FireAuth.authenticate(token)).to eq(false)
+          expect(Eld.authenticate(token)).to eq(false)
         end
       end
 
@@ -185,7 +185,7 @@ RSpec.describe FireAuth::Authenticator do
         let(:exp) { current_time - 5 }
 
         it "returns false" do
-          expect(FireAuth.authenticate(token)).to eq(false)
+          expect(Eld.authenticate(token)).to eq(false)
         end
       end
 
@@ -193,26 +193,26 @@ RSpec.describe FireAuth::Authenticator do
         let(:iss) { "https://securetoken.google.com/bad" }
 
         it "returns false" do
-          expect(FireAuth.authenticate(token)).to eq(false)
+          expect(Eld.authenticate(token)).to eq(false)
         end
       end
     end
 
     context "token is not formatted correctly" do
       it "returns false" do
-        expect(FireAuth.authenticate("test")).to eq(false)
+        expect(Eld.authenticate("test")).to eq(false)
       end
     end
 
     context "nil token" do
       it "returns false" do
-        expect(FireAuth.authenticate(nil)).to eq(false)
+        expect(Eld.authenticate(nil)).to eq(false)
       end
     end
 
     context "empty token" do
       it "returns false" do
-        expect(FireAuth.authenticate("")).to eq(false)
+        expect(Eld.authenticate("")).to eq(false)
       end
     end
   end

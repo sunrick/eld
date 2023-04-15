@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fire_auth (0.2.0)
+    eld (0.2.0)
       httparty (~> 0.21)
       jwt (~> 2.7)
 
@@ -90,7 +90,7 @@ PLATFORMS
   arm64-darwin-20
 
 DEPENDENCIES
-  fire_auth!
+  eld!
   pry
   rake (~> 13.0)
   redis

@@ -3,7 +3,7 @@
 require "jwt"
 require "httparty"
 
-module FireAuth
+module Eld
   class Authenticator
     GOOGLE_ISS = "https://securetoken.google.com"
 
@@ -29,7 +29,7 @@ module FireAuth
 
       kid = JWT.decode(token, nil, false).last["kid"]
 
-      certificate = FireAuth::Certificate.find(kid)
+      certificate = Eld::Certificate.find(kid)
 
       decoded_token = decode_token(token, certificate.public_key)
 

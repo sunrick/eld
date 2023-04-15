@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-module FireAuth
+module Eld
   class Certificate
     GOOGLE_CERTIFICATES_URL =
       "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
 
     def self.all
-      FireAuth.cache.fetch do
+      Eld.cache.fetch do
         response = HTTParty.get(GOOGLE_CERTIFICATES_URL)
 
         {
@@ -23,7 +23,7 @@ module FireAuth
     end
 
     def self.refresh
-      FireAuth.cache.clear
+      Eld.cache.clear
       all
     end
   end

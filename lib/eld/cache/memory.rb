@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module FireAuth
+module Eld
   module Cache
     class Memory
       def initialize

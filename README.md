@@ -1,10 +1,10 @@
-# FireAuth
+# Eld
 
-[![Gem Version](https://badge.fury.io/rb/fire_auth.svg)](https://rubygems.org/gems/fire_auth)
-![Build](https://github.com/sunrick/fire_auth/workflows/CI/badge.svg)
-<a href="https://codeclimate.com/github/sunrick/fire_auth/maintainability"><img src="https://api.codeclimate.com/v1/badges/5e8eadb4762ad371641c/maintainability" /></a>
-<a href="https://codeclimate.com/github/sunrick/fire_auth/test_coverage"><img src="https://api.codeclimate.com/v1/badges/5e8eadb4762ad371641c/test_coverage" /></a>
-[![Known Vulnerabilities](https://snyk.io/test/github/sunrick/fire_auth/badge.svg)](https://snyk.io/test/github/{username}/{repo})
+[![Gem Version](https://badge.fury.io/rb/eld.svg)](https://rubygems.org/gems/eld)
+![Build](https://github.com/sunrick/eld/workflows/CI/badge.svg)
+<a href="https://codeclimate.com/github/sunrick/eld/maintainability"><img src="https://api.codeclimate.com/v1/badges/5e8eadb4762ad371641c/maintainability" /></a>
+<a href="https://codeclimate.com/github/sunrick/eld/test_coverage"><img src="https://api.codeclimate.com/v1/badges/5e8eadb4762ad371641c/test_coverage" /></a>
+[![Known Vulnerabilities](https://snyk.io/test/github/sunrick/eld/badge.svg)](https://snyk.io/test/github/{username}/{repo})
 
 [Firebase Authentication](https://firebase.google.com/docs/auth) for Ruby applications.
 
@@ -13,7 +13,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "fire_auth"
+gem "eld"
 ```
 
 And then execute:
@@ -22,21 +22,21 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install fire_auth
+    $ gem install eld
 
 ## Usage
 
-FireAuth takes a Firebase access token and decodes it. Once you've decoded the token, the rest is up to you!
+Eld takes a Firebase access token and decodes it. Once you've decoded the token, the rest is up to you!
 
 See [Firebase Authentication](https://firebase.google.com/docs/auth) for example client implementations.
 
 ### Basic Usage
 ```rb
-FireAuth.configure do |c|
+Eld.configure do |c|
   c.firebase_id = "FIREBASE_PROJECT_ID"
 end
 
-decoded_token = FireAuth.authenticate("FIREBASE_ACCESS_TOKEN")
+decoded_token = Eld.authenticate("FIREBASE_ACCESS_TOKEN")
 # =>
 {
   "iss" => "https://securetoken.google.com/fire-auth-67d5f",
@@ -62,41 +62,41 @@ user = User.new(decoded_token)
 ### Advanced Setup
 
 ```rb
-FireAuth.configure do |c|
+Eld.configure do |c|
   # Use one or more Firebase projects
   c.firebase_id = "FIREBASE_PROJECT_ID"
   # c.firebase_id = ["FIREBASE_PROJECT_ID_1", "FIREBASE_PROJECT_ID_2"]
 
   # Use Redis to cache (recommended)
-  # By default we use FireAuth::Cache::Memory
+  # By default we use Eld::Cache::Memory
   # You can also create your own cache implementation.
-  c.cache = FireAuth::Cache::Redis.new(
+  c.cache = Eld::Cache::Redis.new(
     client: Redis.new, # Your redis client
-    cache_key "fire_auth/certificates" # Optional: This is the default key
+    cache_key "eld/certificates" # Optional: This is the default key
   )
 
   # Use your own authenticator
-  # See FireAuth::Authenticator for an example implementation.
+  # See Eld::Authenticator for an example implementation.
   c.authenticator = CustomAuthenticator
 end
 ```
 
 ### Certificates
 
-The default behavior of FireAuth is to lazily handle caching and fetching certificates from Google when authenticating tokens. This means you don't have to worry about refreshing certificates at any particular interval. However, you can refresh the cache and fetch new certificates whenever you want should you need to.
+The default behavior of Eld is to lazily handle caching and fetching certificates from Google when authenticating tokens. This means you don't have to worry about refreshing certificates at any particular interval. However, you can refresh the cache and fetch new certificates whenever you want should you need to.
 
 ```rb
-FireAuth::Certificate.refresh
+Eld::Certificate.refresh
 ```
 
 ### Custom Authenticators
 
 You can create your own authenticator and use it as a new default or build it anywhere.
 
-Custom authenticators will still use FireAuth defaults for caching.
+Custom authenticators will still use Eld defaults for caching.
 
 ```rb
-class CustomAuthenticator < FireAuth::Authenticator
+class CustomAuthenticator < Eld::Authenticator
   # The default behavior is to return the decoded token
   # You could add additional behavior like finding or instantiating
   # a user.
@@ -113,8 +113,8 @@ class CustomAuthenticator < FireAuth::Authenticator
 end
 
 # Set a new default authenticator
-FireAuth.authenticator = CustomAuthenticator
-FireAuth.authenticate(token)
+Eld.authenticator = CustomAuthenticator
+Eld.authenticate(token)
 # => User(uid: "1231231")
 
 # Instantiate your own authenticator
@@ -134,7 +134,7 @@ class ApplicationController < ActionController::Base
     @current_user = nil
 
     token = request.headers["X-Access-Token"]
-    decoded_token = FireAuth.authenticate(token)
+    decoded_token = Eld.authenticate(token)
 
     if payload
       # Find a User from DB?
@@ -162,7 +162,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/sunrick/fire_auth. Please check the [code of conduct](https://github.com/sunrick/fire_auth/blob/main/CODE_OF_CONDUCT.md) before contributing.
+Bug reports and pull requests are welcome on GitHub at https://github.com/sunrick/eld. Please check the [code of conduct](https://github.com/sunrick/eld/blob/main/CODE_OF_CONDUCT.md) before contributing.
 
 ## License
 

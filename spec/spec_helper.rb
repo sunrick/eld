@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "fire_auth"
+require "eld"
 require "vcr"
 require "redis"
 require "pry"
