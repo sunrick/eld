@@ -26,7 +26,6 @@ Or install it yourself as:
 
 ## Usage
 
-By default FireAuth is designed to be simple as possible and can be used with any Ruby application.
 FireAuth takes a Firebase access token and decodes it. Once you've decoded the token, the rest is up to you!
 
 See [Firebase Authentication](https://firebase.google.com/docs/auth) for example client implementations.
