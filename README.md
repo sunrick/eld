@@ -72,7 +72,7 @@ Eld.configure do |c|
   # You can also create your own cache implementation.
   c.cache = Eld::Cache::Redis.new(
     client: Redis.new, # Your redis client
-    cache_key "eld/certificates" # Optional: This is the default key
+    cache_key: "eld/certificates" # Optional: This is the default key
   )
 
   # Use your own authenticator
